@@ -1,4 +1,4 @@
-﻿
+
 # E-Vote System
 ## Database Design
 
