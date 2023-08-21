@@ -15,8 +15,8 @@ public class TestGetAllUsers {
 
 		assertDoesNotThrow(() -> {
 
-			User finalUser = userService.findById(2);
-			// System.out.println(finalUser);
+			User findUser = userService.findById(2);
+			System.out.println(findUser);
 
 		});
 

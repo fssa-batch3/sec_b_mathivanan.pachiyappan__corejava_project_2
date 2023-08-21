@@ -13,8 +13,17 @@ import in.fssa.evotingsystem.model.Election;
 import in.fssa.evotingsystem.service.ElectionService;
 import in.fssa.evotingsystem.util.ConnectionUtil;
 
+/**
+ * The ElectionDAO class provides methods to interact with the database and perform operations related to Election entities.
+ */
 public class ElectionDAO implements ElectionInterface{
 	
+	/**
+     * Creates a new Election entity in the database.
+     *
+     * @param election The Election object to be created.
+     * @throws RuntimeException If there's an issue with the database operation.
+     */
 	@Override
 	public void create(Election election) {
 		Connection con = null;
@@ -55,6 +64,12 @@ public class ElectionDAO implements ElectionInterface{
 
 	}
 
+	/**
+     * Marks an Election entity as inactive in the database.
+     *
+     * @param newId The ID of the Election to be marked as inactive.
+     * @throws RuntimeException If there's an issue with the database operation.
+     */
 	@Override
 	public void delete(int newId) {
 		Connection con = null;
@@ -83,6 +98,13 @@ public class ElectionDAO implements ElectionInterface{
 		}
 	}
 
+	/**
+     * Updates an Election entity's information in the database.
+     *
+     * @param id The ID of the Election to be updated.
+     * @param newElection The updated Election object.
+     * @throws RuntimeException If there's an issue with the database operation.
+     */
 	@Override
 	public void update(int id, Election newElection) {
 		Connection con = null;
@@ -116,6 +138,13 @@ public class ElectionDAO implements ElectionInterface{
 
 	}
 
+	 /**
+     * Retrieves an Election entity from the database based on the provided Election ID.
+     *
+     * @param id The ID of the Election to retrieve.
+     * @return The matched Election entity or null if not found.
+     * @throws RuntimeException If there's an issue with the database operation.
+     */
 	public Election findById(int Id) throws RuntimeException {
 		Connection con = null;
 		PreparedStatement ps = null;
@@ -153,8 +182,12 @@ public class ElectionDAO implements ElectionInterface{
 		return matchedElection;
 	}
 
-	// JDBC Connections
-
+	/**
+     * Retrieves a list of Election entities from the database.
+     *
+     * @return A list of Election entities.
+     * @throws RuntimeException If there's an issue with the database operation.
+     */
 	public List<Election> findAll() throws RuntimeException {
 
 		Connection con = null;
@@ -198,6 +231,12 @@ public class ElectionDAO implements ElectionInterface{
 
 	}
 
+	/**
+     * Counts the number of active Election entities in the database.
+     *
+     * @return The count of active Election entities.
+     * @throws RuntimeException If there's an issue with the database operation.
+     */
 	public int count() {
 		Connection con = null;
 		PreparedStatement ps = null;

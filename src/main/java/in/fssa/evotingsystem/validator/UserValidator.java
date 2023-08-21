@@ -7,10 +7,20 @@ import in.fssa.evotingsystem.exception.ValidationException;
 import in.fssa.evotingsystem.model.User;
 import in.fssa.evotingsystem.util.StringUtil;
 
+/**
+ * The UserValidator class provides methods to validate User entity-related
+ * operations and attributes.
+ */
 public class UserValidator {
 
 	private static final String PASSWORD_PATTERN = "^(?=.*[0-9])(?=.*[a-zA-Z])(?=.*[@#$%^&+=])(?=\\S+$).{8,}$";
 
+	/**
+	 * Validates the attributes of a User entity.
+	 *
+	 * @param newUser The User object to be validated.
+	 * @throws ValidationException If the User object or its attributes are invalid.
+	 */
 	public static void validate(User newUser) throws ValidationException {
 
 		if (newUser == null) {
@@ -49,6 +59,13 @@ public class UserValidator {
 		StringUtil.rejectIfInvalidString(newUser.getAddress(), "Address");
 	}
 
+	/**
+	 * Checks if a user ID exists in the database.
+	 *
+	 * @param id The ID of the User to check.
+	 * @throws ValidationException If the ID is not valid or if the User does not
+	 *                             exist.
+	 */
 	public static void isIdExists(int id) throws ValidationException {
 
 		validateId(id);
@@ -59,11 +76,17 @@ public class UserValidator {
 		user = ud.findById(id);
 
 		if (user == null) {
-			throw new ValidationException("user not exist");
+			throw new ValidationException("User not exsists");
 		}
 
 	}
 
+	/**
+	 * Validates a user ID.
+	 *
+	 * @param id The ID of the User to validate.
+	 * @throws ValidationException If the ID is not valid.
+	 */
 	public static void validateId(int id) throws ValidationException {
 
 		if (id < 1) {

@@ -99,6 +99,7 @@ public class CandidateService {
      */
 	public CandidateDAO update(int newId, Candidate candidate) throws ValidationException {
 
+		CandidateValidator.isIdExists(newId);
 		CandidateValidator.validate(candidate);
 
 		candidatedao.update(newId, candidate);

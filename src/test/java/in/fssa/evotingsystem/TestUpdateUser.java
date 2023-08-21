@@ -17,22 +17,19 @@ public class TestUpdateUser {
 		UserService userService = new UserService();
 
 		User newUser = new User();
-
-		newUser.setId(12345);
-		newUser.setPhoneNumber(9876543210L); // Negative phone number
-		newUser.setPassword("");
+		
+//		newUser .setPhoneNumber(9876543212L);
+		newUser.setPassword("hbihbibiio");
 		newUser.setAddress("123 Main St, City");
-		newUser.setVoterId(12345);
 		newUser.setTalukId(1); // Assuming 1 is a valid taluk ID
-		newUser.setActive(true);
 
 		Exception exception = assertThrows(ValidationException.class, () -> {
 
-			userService.update(1, newUser);
+			userService.update(10022, newUser);
 		});
 
 		String except = exception.getMessage();
-		String message = "user not exist";
+		String message = "User not exsists";
 
 		assertTrue(except.equals(message));
 

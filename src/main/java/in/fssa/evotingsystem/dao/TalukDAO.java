@@ -12,8 +12,17 @@ import in.fssa.evotingsystem.model.Taluk;
 import in.fssa.evotingsystem.model.User;
 import in.fssa.evotingsystem.util.ConnectionUtil;
 
+/**
+ * The TalukDAO class provides methods to interact with the database and perform operations related to Taluk entities.
+ */
 public class TalukDAO implements TalukInterface {
 
+	/**
+     * Creates a new Taluk entity in the database.
+     *
+     * @param taluk The Taluk object to be created.
+     * @throws RuntimeException If there's an issue with the database operation.
+     */
 	@Override
 	public void create(Taluk taluk) {
 		Connection con = null;
@@ -45,6 +54,12 @@ public class TalukDAO implements TalukInterface {
 
 	}
 
+	/**
+     * Marks a Taluk entity as inactive in the database.
+     *
+     * @param newId The ID of the Taluk to be marked as inactive.
+     * @throws RuntimeException If there's an issue with the database operation.
+     */
 	@Override
 	public void delete(int newId) {
 		Connection con = null;
@@ -73,6 +88,13 @@ public class TalukDAO implements TalukInterface {
 		}
 	}
 
+	/**
+     * Updates a Taluk entity's information in the database.
+     *
+     * @param id The ID of the Taluk to be updated.
+     * @param newTaluk The updated Taluk object.
+     * @throws RuntimeException If there's an issue with the database operation.
+     */
 	@Override
 	public void update(int id, Taluk newTaluk) {
 		Connection con = null;
@@ -99,6 +121,13 @@ public class TalukDAO implements TalukInterface {
 
 	}
 
+	/**
+     * Retrieves a Taluk entity from the database based on the provided taluk ID.
+     *
+     * @param talukId The ID of the Taluk to retrieve.
+     * @return The matched Taluk entity or null if not found.
+     * @throws RuntimeException If there's an issue with the database operation.
+     */
 	public Taluk findById(int talukId) throws RuntimeException {
 		Connection con = null;
 		PreparedStatement ps = null;
@@ -130,6 +159,12 @@ public class TalukDAO implements TalukInterface {
 		return matchedTaluk;
 	}
 
+	/**
+     * Retrieves a list of Taluk entities from the database.
+     *
+     * @return A list of Taluk entities.
+     * @throws RuntimeException If there's an issue with the database operation.
+     */
 	public List<Taluk> findAll() throws RuntimeException {
 
 		Connection con = null;
@@ -168,6 +203,12 @@ public class TalukDAO implements TalukInterface {
 
 	}
 
+	/**
+     * Counts the number of active Taluk entities in the database.
+     *
+     * @return The count of active Taluk entities.
+     * @throws RuntimeException If there's an issue with the database operation.
+     */
 	public int count() {
 		Connection con = null;
 		PreparedStatement ps = null;

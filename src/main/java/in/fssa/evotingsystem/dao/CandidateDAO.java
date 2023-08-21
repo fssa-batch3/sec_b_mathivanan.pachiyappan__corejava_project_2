@@ -13,8 +13,17 @@ import in.fssa.evotingsystem.model.Candidate;
 import in.fssa.evotingsystem.service.CandidateService;
 import in.fssa.evotingsystem.util.ConnectionUtil;
 
+/**
+ * The CandidateDAO class provides methods to interact with the database and perform operations related to Candidate entities.
+ */
 public class CandidateDAO implements CandidateInterface {
 
+	/**
+     * Creates a new Candidate entity in the database.
+     *
+     * @param candidate The Candidate object to be created.
+     * @throws RuntimeException If there's an issue with the database operation.
+     */
 	@Override
 	public void create(Candidate candidate) {
 		Connection con = null;
@@ -54,6 +63,12 @@ public class CandidateDAO implements CandidateInterface {
 
 	}
 
+	/**
+     * Marks a Candidate entity as inactive in the database.
+     *
+     * @param newId The ID of the Candidate to be marked as inactive.
+     * @throws RuntimeException If there's an issue with the database operation.
+     */
 	@Override
 	public void delete(int newId) {
 		Connection con = null;
@@ -82,6 +97,13 @@ public class CandidateDAO implements CandidateInterface {
 		}
 	}
 
+	/**
+     * Updates a Candidate entity's information in the database.
+     *
+     * @param id The ID of the Candidate to be updated.
+     * @param newCandidate The updated Candidate object.
+     * @throws RuntimeException If there's an issue with the database operation.
+     */
 	@Override
 	public void update(int id, Candidate newCandidate) {
 		Connection con = null;
@@ -109,6 +131,13 @@ public class CandidateDAO implements CandidateInterface {
 
 	}
 
+	/**
+     * Retrieves a Candidate entity from the database based on the provided Candidate ID.
+     *
+     * @param id The ID of the Candidate to retrieve.
+     * @return The matched Candidate entity or null if not found.
+     * @throws RuntimeException If there's an issue with the database operation.
+     */
 	public Candidate findById(int Id) throws RuntimeException {
 		Connection con = null;
 		PreparedStatement ps = null;
@@ -146,8 +175,12 @@ public class CandidateDAO implements CandidateInterface {
 		return matchedCandidate;
 	}
 
-	// JDBC Connections
-
+	/**
+     * Retrieves a list of Candidate entities from the database.
+     *
+     * @return A list of Candidate entities.
+     * @throws RuntimeException If there's an issue with the database operation.
+     */
 	public List<Candidate> findAll() throws RuntimeException {
 
 		Connection con = null;
@@ -191,6 +224,12 @@ public class CandidateDAO implements CandidateInterface {
 
 	}
 
+	/**
+     * Counts the number of active Candidate entities in the database.
+     *
+     * @return The count of active Candidate entities.
+     * @throws RuntimeException If there's an issue with the database operation.
+     */
 	public int count() {
 		Connection con = null;
 		PreparedStatement ps = null;

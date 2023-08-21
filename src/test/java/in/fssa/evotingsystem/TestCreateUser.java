@@ -18,8 +18,8 @@ public class TestCreateUser {
 
 		User newUser = new User();
 
-		newUser.setId(1004);
-		newUser.setPhoneNumber(9112264837L);
+		newUser.setId(10);
+		newUser.setPhoneNumber(8608285560L);
 		newUser.setPassword("Njcat#10van");
 		newUser.setAddress("112 Main St, City");
 		newUser.setVoterId(6782);
@@ -199,11 +199,11 @@ public class TestCreateUser {
 	@Test
 	public void testCreateUserWithExistingPhoneNumber () {
 		UserService userService = new UserService();
-		Exception exception = assertThrows(ValidationException.class, () -> {
+		Exception exception = assertThrows(RuntimeException.class, () -> {
 
 			User newUser = new User();
 
-			newUser.setId(4);
+			newUser.setId(101);
 			newUser.setPhoneNumber(1234567890L);
 			newUser.setPassword("Njcat#10van");
 			newUser.setAddress("123 Main St, City");

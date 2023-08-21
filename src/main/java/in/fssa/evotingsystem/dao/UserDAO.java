@@ -11,8 +11,17 @@ import in.fssa.evotingsystem.Interface.UserInterface;
 import in.fssa.evotingsystem.model.User;
 import in.fssa.evotingsystem.util.ConnectionUtil;
 
+/**
+ * The UserDAO class provides methods to interact with the database and perform operations related to User entities.
+ */
 public class UserDAO implements UserInterface {
 	
+	 /**
+     * Creates a new User entity in the database.
+     *
+     * @param user The User object to be created.
+     * @throws RuntimeException If there's an issue with the database operation.
+     */
 	@Override
 	public void create(User user) {
 		Connection con = null;
@@ -48,6 +57,12 @@ public class UserDAO implements UserInterface {
 
 	}
 
+	/**
+     * Marks a User entity as inactive in the database.
+     *
+     * @param newId The ID of the User to be marked as inactive.
+     * @throws RuntimeException If there's an issue with the database operation.
+     */
 	@Override
 	public void delete(int newId) {
 		Connection con = null;
@@ -76,6 +91,13 @@ public class UserDAO implements UserInterface {
 		}
 	}
 
+	/**
+     * Updates a User entity's information in the database.
+     *
+     * @param id The ID of the User to be updated.
+     * @param newUser The updated User object.
+     * @throws RuntimeException If there's an issue with the database operation.
+     */
 	@Override
 	public void update(int id, User newUser) {
 		Connection con = null;
@@ -104,6 +126,13 @@ public class UserDAO implements UserInterface {
 
 	}
 
+	/**
+     * Retrieves a User entity from the database based on the provided user ID.
+     *
+     * @param userId The ID of the User to retrieve.
+     * @return The matched User entity or null if not found.
+     * @throws RuntimeException If there's an issue with the database operation.
+     */
 	public User findById(int userId) throws RuntimeException {
 		Connection con = null;
 		PreparedStatement ps = null;
@@ -141,8 +170,12 @@ public class UserDAO implements UserInterface {
 		return matchedUser;
 	}
 
-	// JDBC Connections
-
+	/**
+     * Retrieves a list of active User entities from the database.
+     *
+     * @return A list of active User entities.
+     * @throws RuntimeException If there's an issue with the database operation.
+     */
 	public List<User> findAll() throws RuntimeException {
 
 		Connection con = null;
@@ -186,6 +219,12 @@ public class UserDAO implements UserInterface {
 
 	}
 
+	/**
+     * Counts the number of active User entities in the database.
+     *
+     * @return The count of active User entities.
+     * @throws RuntimeException If there's an issue with the database operation.
+     */
 	public int count() {
 		Connection con = null;
 		PreparedStatement ps = null;
