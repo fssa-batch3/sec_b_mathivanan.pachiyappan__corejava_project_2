@@ -20,12 +20,12 @@ public class TestCreateElection {
 
 		Election newElection = new Election();
 
-		newElection.setId(194);
-		newElection.setBoothAddress("Community hall");
-		newElection.setElectionName("Prime minister election 2023");
-		newElection.setElectionDate(LocalDate.of(2023, 9, 12));
+//		newElection.setId(194);
+		newElection.setBoothAddress(null);
+		newElection.setElectionName(null);
+		newElection.setElectionDate(null);
 		newElection.setTalukId(1);
-		newElection.setActive(true);
+//		newElection.setActive(true);
 
 		assertDoesNotThrow(() -> {
 			electionService.create(newElection);

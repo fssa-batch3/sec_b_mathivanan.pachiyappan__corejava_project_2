@@ -8,27 +8,30 @@ import java.util.ArrayList;
 import java.util.List;
 
 import in.fssa.evotingsystem.Interface.UserInterface;
+import in.fssa.evotingsystem.exception.PersistanceException;
 import in.fssa.evotingsystem.model.User;
 import in.fssa.evotingsystem.util.ConnectionUtil;
 
 /**
- * The UserDAO class provides methods to interact with the database and perform operations related to User entities.
+ * The UserDAO class provides methods to interact with the database and perform
+ * operations related to User entities.
  */
 public class UserDAO implements UserInterface {
-	
-	 /**
-     * Creates a new User entity in the database.
-     *
-     * @param user The User object to be created.
-     * @throws RuntimeException If there's an issue with the database operation.
-     */
+
+	/**
+	 * Creates a new User entity in the database.
+	 *
+	 * @param user The User object to be created.
+	 * @throws PersistanceException If there's an issue with the database operation.
+	 */
 	@Override
-	public void create(User user) {
+	public void create(User user) throws PersistanceException {
 		Connection con = null;
 		PreparedStatement ps = null;
 
+		// TODO table name
 		try {
-			String query = "INSERT INTO User (id, phone_number, password, address, voter_id, taluk_id) VALUES ( ?, ?, ?, ?, ?, ? );";
+			String query = "INSERT INTO users (id, phone_number, password, address, voter_id, taluk_id) VALUES ( ?, ?, ?, ?, ?, ? );";
 			con = ConnectionUtil.getConnection();
 			ps = con.prepareStatement(query);
 
@@ -45,10 +48,10 @@ public class UserDAO implements UserInterface {
 
 		} catch (SQLException e) {
 			if (e.getMessage().contains("Duplicate entry")) {
-				throw new RuntimeException("Duplicate constraint");
+				throw new PersistanceException("Duplicate constraint");
 			} else {
 				System.out.println(e.getMessage());
-				throw new RuntimeException(e);
+				throw new PersistanceException(e);
 			}
 
 		} finally {
@@ -58,18 +61,18 @@ public class UserDAO implements UserInterface {
 	}
 
 	/**
-     * Marks a User entity as inactive in the database.
-     *
-     * @param newId The ID of the User to be marked as inactive.
-     * @throws RuntimeException If there's an issue with the database operation.
-     */
+	 * Marks a User entity as inactive in the database.
+	 *
+	 * @param newId The ID of the User to be marked as inactive.
+	 * @throws PersistanceException If there's an issue with the database operation.
+	 */
 	@Override
-	public void delete(int newId) {
+	public void delete(int newId) throws PersistanceException {
 		Connection con = null;
 		PreparedStatement ps = null;
 
 		try {
-			String query = "UPDATE User SET is_active = false WHERE id = ?";
+			String query = "UPDATE users SET is_active = 0 WHERE id = ?";
 			con = ConnectionUtil.getConnection();
 			ps = con.prepareStatement(query);
 //	        ps.setBoolean(1, false);
@@ -85,26 +88,26 @@ public class UserDAO implements UserInterface {
 		} catch (SQLException e) {
 			e.printStackTrace();
 			System.out.println(e.getMessage());
-			throw new RuntimeException(e);
+			throw new PersistanceException(e);
 		} finally {
 			ConnectionUtil.close(con, ps);
 		}
 	}
 
 	/**
-     * Updates a User entity's information in the database.
-     *
-     * @param id The ID of the User to be updated.
-     * @param newUser The updated User object.
-     * @throws RuntimeException If there's an issue with the database operation.
-     */
+	 * Updates a User entity's information in the database.
+	 *
+	 * @param id      The ID of the User to be updated.
+	 * @param newUser The updated User object.
+	 * @throws PersistanceException If there's an issue with the database operation.
+	 */
 	@Override
-	public void update(int id, User newUser) {
+	public void update(int id, User newUser) throws PersistanceException {
 		Connection con = null;
 		PreparedStatement ps = null;
 
 		try {
-			String query = "UPDATE User SET address = ?,taluk_id = ? Where id = ?";
+			String query = "UPDATE users SET address = ?,taluk_id = ? Where id = ?";
 			con = ConnectionUtil.getConnection();
 			ps = con.prepareStatement(query);
 			ps.setString(1, newUser.getAddress());
@@ -119,7 +122,7 @@ public class UserDAO implements UserInterface {
 		} catch (SQLException e) {
 			e.printStackTrace();
 			System.out.println(e.getMessage());
-			throw new RuntimeException(e);
+			throw new PersistanceException(e);
 		} finally {
 			ConnectionUtil.close(con, ps);
 		}
@@ -127,20 +130,20 @@ public class UserDAO implements UserInterface {
 	}
 
 	/**
-     * Retrieves a User entity from the database based on the provided user ID.
-     *
-     * @param userId The ID of the User to retrieve.
-     * @return The matched User entity or null if not found.
-     * @throws RuntimeException If there's an issue with the database operation.
-     */
-	public User findById(int userId) throws RuntimeException {
+	 * Retrieves a User entity from the database based on the provided user ID.
+	 *
+	 * @param userId The ID of the User to retrieve.
+	 * @return The matched User entity or null if not found.
+	 * @throws PersistanceException If there's an issue with the database operation.
+	 */
+	public User findById(int userId) throws PersistanceException {
 		Connection con = null;
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 		User matchedUser = null;
 
 		try {
-			String query = "SELECT * FROM User WHERE id = ? AND is_active = 1";
+			String query = "SELECT * FROM users WHERE id = ? AND is_active = 1";
 			con = ConnectionUtil.getConnection();
 			ps = con.prepareStatement(query);
 			ps.setInt(1, userId);
@@ -161,7 +164,7 @@ public class UserDAO implements UserInterface {
 		} catch (SQLException e) {
 			e.printStackTrace();
 			System.out.println(e.getMessage());
-			throw new RuntimeException(e);
+			throw new PersistanceException(e);
 		} finally {
 			ConnectionUtil.close(con, ps, rs);
 		}
@@ -171,12 +174,12 @@ public class UserDAO implements UserInterface {
 	}
 
 	/**
-     * Retrieves a list of active User entities from the database.
-     *
-     * @return A list of active User entities.
-     * @throws RuntimeException If there's an issue with the database operation.
-     */
-	public List<User> findAll() throws RuntimeException {
+	 * Retrieves a list of active User entities from the database.
+	 *
+	 * @return A list of active User entities.
+	 * @throws PersistanceException If there's an issue with the database operation.
+	 */
+	public List<User> findAll() throws PersistanceException {
 
 		Connection con = null;
 		PreparedStatement ps = null;
@@ -185,7 +188,7 @@ public class UserDAO implements UserInterface {
 		List<User> userList = new ArrayList<User>();
 
 		try {
-			String query = "SELECT * from User where is_active = 1";
+			String query = "SELECT * from users where is_active = 1";
 			con = ConnectionUtil.getConnection();
 			ps = con.prepareStatement(query);
 			rs = ps.executeQuery();
@@ -207,7 +210,7 @@ public class UserDAO implements UserInterface {
 
 			e.printStackTrace();
 			System.out.println(e.getMessage());
-			throw new RuntimeException(e);
+			throw new PersistanceException(e);
 
 		} finally {
 
@@ -216,39 +219,6 @@ public class UserDAO implements UserInterface {
 		}
 
 		return userList;
-
-	}
-
-	/**
-     * Counts the number of active User entities in the database.
-     *
-     * @return The count of active User entities.
-     * @throws RuntimeException If there's an issue with the database operation.
-     */
-	public int count() {
-		Connection con = null;
-		PreparedStatement ps = null;
-		ResultSet rs = null;
-		int count = 0;
-
-		List<User> userList = new ArrayList<User>();
-		try {
-			String query = "SELECT * FROM User Where is_active = 1";
-			con = ConnectionUtil.getConnection();
-			ps = con.prepareStatement(query);
-			rs = ps.executeQuery();
-
-			while (rs.next()) {
-				count++;
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-			System.out.println(e.getMessage());
-			throw new RuntimeException(e);
-		} finally {
-			ConnectionUtil.close(con, ps, rs);
-		}
-		return count;
 
 	}
 

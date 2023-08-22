@@ -7,27 +7,27 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.Test;
 
 import in.fssa.evotingsystem.exception.ValidationException;
-import in.fssa.evotingsystem.service.UserService;
+import in.fssa.evotingsystem.service.TalukService;
 
-public class TestDeleteUser {
+public class TestDeleteTask {
 
 	@Test
-	public void testDeleteUser() {
+	public void testDeleteTaluk() {
 
-		UserService userService = new UserService();
+		TalukService talukService = new TalukService();
 
 		assertDoesNotThrow(() -> {
 
-			userService.delete(2);
+			talukService.delete(2);
 		});
 	}
 	
 	@Test
-	public void testDeleteUserWithInvalidId() {
+	public void testDeleteTalukWithInvalidId() {
 
-		UserService userService = new UserService();
+		TalukService talukService = new TalukService();
 		Exception exception = assertThrows(ValidationException.class, () -> {
-			userService.delete(-2);
+			talukService.delete(-2);
 		});
 		String expectedMessage = "Id can not be 0 or negative";
 		String actualMessage = exception.getMessage();

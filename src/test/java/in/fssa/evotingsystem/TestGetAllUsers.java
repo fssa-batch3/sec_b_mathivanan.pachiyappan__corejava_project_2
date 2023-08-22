@@ -24,16 +24,11 @@ public class TestGetAllUsers {
 
 	@Test
 	public void getAllUsers() {
-		UserService userService = new UserService();
-		System.out.println(userService.getAll());
+		assertDoesNotThrow(() -> {
+			UserService userService = new UserService();
+			System.out.println(userService.getAll());
 
-	}
-
-	@Test
-	public void counting() {
-		UserService userService = new UserService();
-
-		System.out.println(userService.count());
+		});
 
 	}
 

@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import in.fssa.evotingsystem.Interface.TalukInterface;
+import in.fssa.evotingsystem.exception.PersistanceException;
 import in.fssa.evotingsystem.model.Taluk;
 import in.fssa.evotingsystem.model.User;
 import in.fssa.evotingsystem.util.ConnectionUtil;
@@ -21,15 +22,15 @@ public class TalukDAO implements TalukInterface {
      * Creates a new Taluk entity in the database.
      *
      * @param taluk The Taluk object to be created.
-     * @throws RuntimeException If there's an issue with the database operation.
+     * @throws PersistanceException If there's an issue with the database operation.
      */
 	@Override
-	public void create(Taluk taluk) {
+	public void create(Taluk taluk) throws PersistanceException {
 		Connection con = null;
 		PreparedStatement ps = null;
 
 		try {
-			String query = "INSERT INTO Taluk (id, taluk_name) VALUES ( ?, ? );";
+			String query = "INSERT INTO taluks (id, taluk_name) VALUES ( ?, ? );";
 			con = ConnectionUtil.getConnection();
 			ps = con.prepareStatement(query);
 
@@ -42,10 +43,10 @@ public class TalukDAO implements TalukInterface {
 
 		} catch (SQLException e) {
 			if (e.getMessage().contains("Duplicate entry")) {
-				throw new RuntimeException("Duplicate constraint");
+				throw new PersistanceException("Duplicate constraint");
 			} else {
 				System.out.println(e.getMessage());
-				throw new RuntimeException(e);
+				throw new PersistanceException(e);
 			}
 
 		} finally {
@@ -58,15 +59,15 @@ public class TalukDAO implements TalukInterface {
      * Marks a Taluk entity as inactive in the database.
      *
      * @param newId The ID of the Taluk to be marked as inactive.
-     * @throws RuntimeException If there's an issue with the database operation.
+     * @throws PersistanceException If there's an issue with the database operation.
      */
 	@Override
-	public void delete(int newId) {
+	public void delete(int newId) throws PersistanceException {
 		Connection con = null;
 		PreparedStatement ps = null;
 
 		try {
-			String query = "UPDATE Taluk SET is_active = false WHERE id = ?";
+			String query = "UPDATE taluks SET is_active = false WHERE id = ?";
 			con = ConnectionUtil.getConnection();
 			ps = con.prepareStatement(query);
 //	        ps.setBoolean(1, false);
@@ -82,7 +83,7 @@ public class TalukDAO implements TalukInterface {
 		} catch (SQLException e) {
 			e.printStackTrace();
 			System.out.println(e.getMessage());
-			throw new RuntimeException(e);
+			throw new PersistanceException(e);
 		} finally {
 			ConnectionUtil.close(con, ps);
 		}
@@ -93,15 +94,15 @@ public class TalukDAO implements TalukInterface {
      *
      * @param id The ID of the Taluk to be updated.
      * @param newTaluk The updated Taluk object.
-     * @throws RuntimeException If there's an issue with the database operation.
+     * @throws PersistanceException If there's an issue with the database operation.
      */
 	@Override
-	public void update(int id, Taluk newTaluk) {
+	public void update(int id, Taluk newTaluk) throws PersistanceException {
 		Connection con = null;
 		PreparedStatement ps = null;
 
 		try {
-			String query = "UPDATE Taluk SET taluk_name = ? Where id = ?";
+			String query = "UPDATE taluks SET taluk_name = ? Where id = ?";
 			con = ConnectionUtil.getConnection();
 			ps = con.prepareStatement(query);
 			ps.setString(1, newTaluk.getTalukName());
@@ -114,7 +115,7 @@ public class TalukDAO implements TalukInterface {
 		} catch (SQLException e) {
 			e.printStackTrace();
 			System.out.println(e.getMessage());
-			throw new RuntimeException(e);
+			throw new PersistanceException(e);
 		} finally {
 			ConnectionUtil.close(con, ps);
 		}
@@ -126,16 +127,16 @@ public class TalukDAO implements TalukInterface {
      *
      * @param talukId The ID of the Taluk to retrieve.
      * @return The matched Taluk entity or null if not found.
-     * @throws RuntimeException If there's an issue with the database operation.
+     * @throws PersistanceException If there's an issue with the database operation.
      */
-	public Taluk findById(int talukId) throws RuntimeException {
+	public Taluk findById(int talukId) throws PersistanceException {
 		Connection con = null;
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 		Taluk matchedTaluk = null;
 
 		try {
-			String query = "SELECT * FROM Taluk WHERE id = ? AND is_active = 1";
+			String query = "SELECT * FROM taluks WHERE id = ? AND is_active = 1";
 			con = ConnectionUtil.getConnection();
 			ps = con.prepareStatement(query);
 			ps.setInt(1, talukId);
@@ -150,7 +151,7 @@ public class TalukDAO implements TalukInterface {
 		} catch (SQLException e) {
 			e.printStackTrace();
 			System.out.println(e.getMessage());
-			throw new RuntimeException(e);
+			throw new PersistanceException(e);
 		} finally {
 			ConnectionUtil.close(con, ps, rs);
 		}
@@ -163,9 +164,9 @@ public class TalukDAO implements TalukInterface {
      * Retrieves a list of Taluk entities from the database.
      *
      * @return A list of Taluk entities.
-     * @throws RuntimeException If there's an issue with the database operation.
+     * @throws PersistanceException If there's an issue with the database operation.
      */
-	public List<Taluk> findAll() throws RuntimeException {
+	public List<Taluk> findAll() throws PersistanceException {
 
 		Connection con = null;
 		PreparedStatement ps = null;
@@ -174,7 +175,7 @@ public class TalukDAO implements TalukInterface {
 		List<Taluk> talukList = new ArrayList<Taluk>();
 
 		try {
-			String query = "SELECT * from User where is_active = 1";
+			String query = "SELECT * from taluks where is_active = 1";
 			con = ConnectionUtil.getConnection();
 			ps = con.prepareStatement(query);
 			rs = ps.executeQuery();
@@ -191,7 +192,7 @@ public class TalukDAO implements TalukInterface {
 
 			e.printStackTrace();
 			System.out.println(e.getMessage());
-			throw new RuntimeException(e);
+			throw new PersistanceException(e);
 
 		} finally {
 
@@ -203,36 +204,4 @@ public class TalukDAO implements TalukInterface {
 
 	}
 
-	/**
-     * Counts the number of active Taluk entities in the database.
-     *
-     * @return The count of active Taluk entities.
-     * @throws RuntimeException If there's an issue with the database operation.
-     */
-	public int count() {
-		Connection con = null;
-		PreparedStatement ps = null;
-		ResultSet rs = null;
-		int count = 0;
-
-		List<User> userList = new ArrayList<User>();
-		try {
-			String query = "SELECT * FROM User Where is_active = 1";
-			con = ConnectionUtil.getConnection();
-			ps = con.prepareStatement(query);
-			rs = ps.executeQuery();
-
-			while (rs.next()) {
-				count++;
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-			System.out.println(e.getMessage());
-			throw new RuntimeException(e);
-		} finally {
-			ConnectionUtil.close(con, ps, rs);
-		}
-		return count;
-
-	}
 }

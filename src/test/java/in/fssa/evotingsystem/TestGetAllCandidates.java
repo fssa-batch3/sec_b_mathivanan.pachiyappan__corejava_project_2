@@ -7,7 +7,6 @@ import org.junit.jupiter.api.Test;
 import in.fssa.evotingsystem.model.Candidate;
 import in.fssa.evotingsystem.service.CandidateService;
 
-
 public class TestGetAllCandidates {
 
 	@Test
@@ -25,16 +24,10 @@ public class TestGetAllCandidates {
 
 	@Test
 	public void getAllCandidates() {
-		CandidateService candidateService = new CandidateService();
-		System.out.println(candidateService.getAll());
-
-	}
-
-	@Test
-	public void counting() {
-		CandidateService candidateService = new CandidateService();
-
-		System.out.println(candidateService.count());
+		assertDoesNotThrow(() -> {
+			CandidateService candidateService = new CandidateService();
+			System.out.println(candidateService.getAll());
+		});
 
 	}
 }

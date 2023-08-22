@@ -1,5 +1,7 @@
 package in.fssa.evotingsystem.validator;
 
+import in.fssa.evotingsystem.dao.TalukDAO;
+import in.fssa.evotingsystem.exception.PersistanceException;
 import in.fssa.evotingsystem.exception.ValidationException;
 import in.fssa.evotingsystem.model.Taluk;
 import in.fssa.evotingsystem.util.StringUtil;
@@ -30,4 +32,46 @@ public class TalukValidator {
 		StringUtil.rejectIfInvalidString(newTaluk.getTalukName(), "Taluk Name");
 
 	}
+	
+	/**
+	 * Checks if a Taluk ID exists in the database.
+	 *
+	 * @param id The ID of the Taluk to check.
+	 * @throws ValidationException If the ID is not valid or if the Taluk does not
+	 *                             exist.
+	 */
+	public static void isIdExists(int id) throws ValidationException {
+
+		validateId(id);
+
+		TalukDAO talukdao = new TalukDAO();
+		Taluk taluk = new Taluk();
+
+		try {
+		      taluk = talukdao.findById(id);
+		} catch (PersistanceException e) {
+			throw new ValidationException(e.getMessage());
+		}
+
+		if (taluk == null) {
+			throw new ValidationException("Taluk not exsists");
+		}
+
+	}
+	
+	/**
+	 * Validates a taluk ID.
+	 *
+	 * @param id The ID of the Taluk to validate.
+	 * @throws ValidationException If the ID is not valid.
+	 */
+	public static void validateId(int id) throws ValidationException {
+
+		if (id < 1) {
+
+			throw new ValidationException("Id can not be 0 or negative");
+		}
+
+	}
+
 }

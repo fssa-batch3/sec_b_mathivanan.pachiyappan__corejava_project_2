@@ -1,6 +1,7 @@
 package in.fssa.evotingsystem.validator;
 
 import in.fssa.evotingsystem.dao.ElectionDAO;
+import in.fssa.evotingsystem.exception.PersistanceException;
 import in.fssa.evotingsystem.exception.ValidationException;
 import in.fssa.evotingsystem.model.Election;
 import in.fssa.evotingsystem.util.StringUtil;
@@ -39,14 +40,20 @@ public class ElectionValidator {
      *
      * @param id The ID of the Election entity to check.
      * @throws ValidationException If the ID is invalid or the Election does not exist.
+     * @throws PersistanceException 
      */
     public static void isIdExists(int id) throws ValidationException {
         validateId(id);
 
-        ElectionDAO ud = new ElectionDAO();
-        Election user = ud.findById(id);
+        ElectionDAO electiondao = new ElectionDAO();
+        Election election;
+		try {
+			election = electiondao.findById(id);
+		} catch (PersistanceException e) {
+			throw new ValidationException(e.getMessage());
+		}
 
-        if (user == null) {
+        if (election == null) {
 			throw new ValidationException("Election not exist");
         }
     }

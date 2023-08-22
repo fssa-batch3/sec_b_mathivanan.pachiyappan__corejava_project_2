@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import in.fssa.evotingsystem.Interface.ElectionInterface;
+import in.fssa.evotingsystem.exception.PersistanceException;
 import in.fssa.evotingsystem.model.Election;
 import in.fssa.evotingsystem.service.ElectionService;
 import in.fssa.evotingsystem.util.ConnectionUtil;
@@ -22,15 +23,15 @@ public class ElectionDAO implements ElectionInterface{
      * Creates a new Election entity in the database.
      *
      * @param election The Election object to be created.
-     * @throws RuntimeException If there's an issue with the database operation.
+     * @throws PersistanceException If there's an issue with the database operation.
      */
 	@Override
-	public void create(Election election) {
+	public void create(Election election) throws PersistanceException{
 		Connection con = null;
 		PreparedStatement ps = null;
 
 		try {
-			String query = "INSERT INTO Election (id, election_name, booth_address, election_date, taluk_id) VALUES ( ?, ?, ?, ?, ? );";
+			String query = "INSERT INTO elections (id, election_name, booth_address, election_date, taluk_id) VALUES ( ?, ?, ?, ?, ? );";
 			con = ConnectionUtil.getConnection();
 			ps = con.prepareStatement(query);
 
@@ -52,10 +53,10 @@ public class ElectionDAO implements ElectionInterface{
 
 		} catch (SQLException e) {
 			if (e.getMessage().contains("Duplicate entry")) {
-				throw new RuntimeException("Duplicate constraint");
+				throw new PersistanceException("Duplicate constraint");
 			} else {
 				System.out.println(e.getMessage());
-				throw new RuntimeException(e);
+				throw new PersistanceException(e);
 			}
 
 		} finally {
@@ -68,15 +69,15 @@ public class ElectionDAO implements ElectionInterface{
      * Marks an Election entity as inactive in the database.
      *
      * @param newId The ID of the Election to be marked as inactive.
-     * @throws RuntimeException If there's an issue with the database operation.
+     * @throws PersistanceException If there's an issue with the database operation.
      */
 	@Override
-	public void delete(int newId) {
+	public void delete(int newId) throws PersistanceException{
 		Connection con = null;
 		PreparedStatement ps = null;
 
 		try {
-			String query = "UPDATE Election SET is_active = false WHERE id = ?";
+			String query = "UPDATE elections SET is_active = false WHERE id = ?";
 			con = ConnectionUtil.getConnection();
 			ps = con.prepareStatement(query);
 //	        ps.setBoolean(1, false);
@@ -92,7 +93,7 @@ public class ElectionDAO implements ElectionInterface{
 		} catch (SQLException e) {
 			e.printStackTrace();
 			System.out.println(e.getMessage());
-			throw new RuntimeException(e);
+			throw new PersistanceException(e);
 		} finally {
 			ConnectionUtil.close(con, ps);
 		}
@@ -103,15 +104,15 @@ public class ElectionDAO implements ElectionInterface{
      *
      * @param id The ID of the Election to be updated.
      * @param newElection The updated Election object.
-     * @throws RuntimeException If there's an issue with the database operation.
+     * @throws PersistanceException If there's an issue with the database operation.
      */
 	@Override
-	public void update(int id, Election newElection) {
+	public void update(int id, Election newElection) throws PersistanceException{
 		Connection con = null;
 		PreparedStatement ps = null;
 
 		try {
-			String query = "UPDATE Election SET booth_address = ?,taluk_id = ? Where id = ?";
+			String query = "UPDATE elections SET booth_address = ?,taluk_id = ? Where id = ?";
 			con = ConnectionUtil.getConnection();
 			ps = con.prepareStatement(query);
 			ps.setString(1, newElection.getBoothAddress());
@@ -131,7 +132,7 @@ public class ElectionDAO implements ElectionInterface{
 		} catch (SQLException e) {
 			e.printStackTrace();
 			System.out.println(e.getMessage());
-			throw new RuntimeException(e);
+			throw new PersistanceException(e);
 		} finally {
 			ConnectionUtil.close(con, ps);
 		}
@@ -143,16 +144,16 @@ public class ElectionDAO implements ElectionInterface{
      *
      * @param id The ID of the Election to retrieve.
      * @return The matched Election entity or null if not found.
-     * @throws RuntimeException If there's an issue with the database operation.
+     * @throws PersistanceException If there's an issue with the database operation.
      */
-	public Election findById(int Id) throws RuntimeException {
+	public Election findById(int Id) throws PersistanceException {
 		Connection con = null;
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 		Election matchedElection = null;
 
 		try {
-			String query = "SELECT * FROM Election WHERE id = ? AND is_active = 1";
+			String query = "SELECT * FROM elections WHERE id = ? AND is_active = 1";
 			con = ConnectionUtil.getConnection();
 			ps = con.prepareStatement(query);
 			ps.setInt(1, Id);
@@ -173,7 +174,7 @@ public class ElectionDAO implements ElectionInterface{
 		} catch (SQLException e) {
 			e.printStackTrace();
 			System.out.println(e.getMessage());
-			throw new RuntimeException(e);
+			throw new PersistanceException(e);
 		} finally {
 			ConnectionUtil.close(con, ps, rs);
 		}
@@ -186,9 +187,9 @@ public class ElectionDAO implements ElectionInterface{
      * Retrieves a list of Election entities from the database.
      *
      * @return A list of Election entities.
-     * @throws RuntimeException If there's an issue with the database operation.
+     * @throws PersistanceException If there's an issue with the database operation.
      */
-	public List<Election> findAll() throws RuntimeException {
+	public List<Election> findAll() throws PersistanceException {
 
 		Connection con = null;
 		PreparedStatement ps = null;
@@ -197,7 +198,7 @@ public class ElectionDAO implements ElectionInterface{
 		List<Election> ElectionList = new ArrayList<Election>();
 
 		try {
-			String query = "SELECT * from Election where is_active = 1";
+			String query = "SELECT * from elections where is_active = 1";
 			con = ConnectionUtil.getConnection();
 			ps = con.prepareStatement(query);
 			rs = ps.executeQuery();
@@ -219,7 +220,7 @@ public class ElectionDAO implements ElectionInterface{
 
 			e.printStackTrace();
 			System.out.println(e.getMessage());
-			throw new RuntimeException(e);
+			throw new PersistanceException(e);
 
 		} finally {
 
@@ -228,39 +229,6 @@ public class ElectionDAO implements ElectionInterface{
 		}
 
 		return ElectionList;
-
-	}
-
-	/**
-     * Counts the number of active Election entities in the database.
-     *
-     * @return The count of active Election entities.
-     * @throws RuntimeException If there's an issue with the database operation.
-     */
-	public int count() {
-		Connection con = null;
-		PreparedStatement ps = null;
-		ResultSet rs = null;
-		int count = 0;
-
-		List<Election> ElectionList = new ArrayList<Election>();
-		try {
-			String query = "SELECT * FROM Election Where is_active = 1";
-			con = ConnectionUtil.getConnection();
-			ps = con.prepareStatement(query);
-			rs = ps.executeQuery();
-
-			while (rs.next()) {
-				count++;
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-			System.out.println(e.getMessage());
-			throw new RuntimeException(e);
-		} finally {
-			ConnectionUtil.close(con, ps, rs);
-		}
-		return count;
 
 	}
 

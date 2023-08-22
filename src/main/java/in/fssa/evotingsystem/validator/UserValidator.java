@@ -3,6 +3,7 @@ package in.fssa.evotingsystem.validator;
 import java.util.Objects;
 
 import in.fssa.evotingsystem.dao.UserDAO;
+import in.fssa.evotingsystem.exception.PersistanceException;
 import in.fssa.evotingsystem.exception.ValidationException;
 import in.fssa.evotingsystem.model.User;
 import in.fssa.evotingsystem.util.StringUtil;
@@ -31,7 +32,7 @@ public class UserValidator {
 			throw new ValidationException("Password cannot be Null or Empty");
 		}
 
-		if (newUser.getPassword().equals("")) {
+		if (newUser.getPassword() == null || newUser.getPassword().trim().isEmpty()) {
 			throw new ValidationException("Password cannot be Null or Empty");
 		}
 
@@ -70,10 +71,14 @@ public class UserValidator {
 
 		validateId(id);
 
-		UserDAO ud = new UserDAO();
+		UserDAO userdao = new UserDAO();
 		User user = new User();
 
-		user = ud.findById(id);
+		try {
+			user = userdao.findById(id);
+		} catch (PersistanceException e) {
+			throw new ValidationException(e.getMessage());
+		}
 
 		if (user == null) {
 			throw new ValidationException("User not exsists");
@@ -91,7 +96,7 @@ public class UserValidator {
 
 		if (id < 1) {
 
-			throw new ValidationException("id can not be 0 or negative");
+			throw new ValidationException("Id can not be 0 or negative");
 		}
 
 	}

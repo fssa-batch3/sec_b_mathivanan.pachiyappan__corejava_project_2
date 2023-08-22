@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import in.fssa.evotingsystem.Interface.CandidateInterface;
+import in.fssa.evotingsystem.exception.PersistanceException;
 import in.fssa.evotingsystem.model.Candidate;
 import in.fssa.evotingsystem.service.CandidateService;
 import in.fssa.evotingsystem.util.ConnectionUtil;
@@ -22,15 +23,15 @@ public class CandidateDAO implements CandidateInterface {
      * Creates a new Candidate entity in the database.
      *
      * @param candidate The Candidate object to be created.
-     * @throws RuntimeException If there's an issue with the database operation.
+     * @throws PersistanceException If there's an issue with the database operation.
      */
 	@Override
-	public void create(Candidate candidate) {
+	public void create(Candidate candidate) throws PersistanceException{
 		Connection con = null;
 		PreparedStatement ps = null;
 
 		try {
-			String query = "INSERT INTO Candidate (id, user_id, election_id, created_at, name) VALUES ( ?, ?, ?, ?, ? );";
+			String query = "INSERT INTO candidates (id, user_id, election_id, created_at, name) VALUES ( ?, ?, ?, ?, ? );";
 			con = ConnectionUtil.getConnection();
 			ps = con.prepareStatement(query);
 
@@ -51,10 +52,10 @@ public class CandidateDAO implements CandidateInterface {
 
 		} catch (SQLException e) {
 			if (e.getMessage().contains("Duplicate entry")) {
-				throw new RuntimeException("Duplicate constraint");
+				throw new PersistanceException("Duplicate constraint");
 			} else {
 				System.out.println(e.getMessage());
-				throw new RuntimeException(e);
+				throw new PersistanceException(e);
 			}
 
 		} finally {
@@ -67,15 +68,15 @@ public class CandidateDAO implements CandidateInterface {
      * Marks a Candidate entity as inactive in the database.
      *
      * @param newId The ID of the Candidate to be marked as inactive.
-     * @throws RuntimeException If there's an issue with the database operation.
+     * @throws PersistanceException If there's an issue with the database operation.
      */
 	@Override
-	public void delete(int newId) {
+	public void delete(int newId)throws PersistanceException {
 		Connection con = null;
 		PreparedStatement ps = null;
 
 		try {
-			String query = "UPDATE Candidate SET is_active = false WHERE id = ?";
+			String query = "UPDATE candidates SET is_active = false WHERE id = ?";
 			con = ConnectionUtil.getConnection();
 			ps = con.prepareStatement(query);
 //	        ps.setBoolean(1, false);
@@ -91,7 +92,7 @@ public class CandidateDAO implements CandidateInterface {
 		} catch (SQLException e) {
 			e.printStackTrace();
 			System.out.println(e.getMessage());
-			throw new RuntimeException(e);
+			throw new PersistanceException(e);
 		} finally {
 			ConnectionUtil.close(con, ps);
 		}
@@ -102,15 +103,15 @@ public class CandidateDAO implements CandidateInterface {
      *
      * @param id The ID of the Candidate to be updated.
      * @param newCandidate The updated Candidate object.
-     * @throws RuntimeException If there's an issue with the database operation.
+     * @throws PersistanceException If there's an issue with the database operation.
      */
 	@Override
-	public void update(int id, Candidate newCandidate) {
+	public void update(int id, Candidate newCandidate) throws PersistanceException{
 		Connection con = null;
 		PreparedStatement ps = null;
 
 		try {
-			String query = "UPDATE Candidate SET name = ? Where id = ?";
+			String query = "UPDATE candidates SET name = ? Where id = ?";
 			con = ConnectionUtil.getConnection();
 			ps = con.prepareStatement(query);
 			ps.setString(1, newCandidate.getCandidateName());
@@ -124,7 +125,7 @@ public class CandidateDAO implements CandidateInterface {
 		} catch (SQLException e) {
 			e.printStackTrace();
 			System.out.println(e.getMessage());
-			throw new RuntimeException(e);
+			throw new PersistanceException(e);
 		} finally {
 			ConnectionUtil.close(con, ps);
 		}
@@ -136,16 +137,16 @@ public class CandidateDAO implements CandidateInterface {
      *
      * @param id The ID of the Candidate to retrieve.
      * @return The matched Candidate entity or null if not found.
-     * @throws RuntimeException If there's an issue with the database operation.
+     * @throws PersistanceException If there's an issue with the database operation.
      */
-	public Candidate findById(int Id) throws RuntimeException {
+	public Candidate findById(int Id) throws PersistanceException {
 		Connection con = null;
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 		Candidate matchedCandidate = null;
 
 		try {
-			String query = "SELECT * FROM Candidate WHERE id = ? AND is_active = 1";
+			String query = "SELECT * FROM candidates WHERE id = ? AND is_active = 1";
 			con = ConnectionUtil.getConnection();
 			ps = con.prepareStatement(query);
 			ps.setInt(1, Id);
@@ -166,7 +167,7 @@ public class CandidateDAO implements CandidateInterface {
 		} catch (SQLException e) {
 			e.printStackTrace();
 			System.out.println(e.getMessage());
-			throw new RuntimeException(e);
+			throw new PersistanceException(e);
 		} finally {
 			ConnectionUtil.close(con, ps, rs);
 		}
@@ -179,9 +180,9 @@ public class CandidateDAO implements CandidateInterface {
      * Retrieves a list of Candidate entities from the database.
      *
      * @return A list of Candidate entities.
-     * @throws RuntimeException If there's an issue with the database operation.
+     * @throws PersistanceException If there's an issue with the database operation.
      */
-	public List<Candidate> findAll() throws RuntimeException {
+	public List<Candidate> findAll() throws PersistanceException {
 
 		Connection con = null;
 		PreparedStatement ps = null;
@@ -190,7 +191,7 @@ public class CandidateDAO implements CandidateInterface {
 		List<Candidate> CandidateList = new ArrayList<Candidate>();
 
 		try {
-			String query = "SELECT * from Candidate where is_active = 1";
+			String query = "SELECT * from candidates where is_active = 1";
 			con = ConnectionUtil.getConnection();
 			ps = con.prepareStatement(query);
 			rs = ps.executeQuery();
@@ -212,7 +213,7 @@ public class CandidateDAO implements CandidateInterface {
 
 			e.printStackTrace();
 			System.out.println(e.getMessage());
-			throw new RuntimeException(e);
+			throw new PersistanceException(e);
 
 		} finally {
 
@@ -224,36 +225,4 @@ public class CandidateDAO implements CandidateInterface {
 
 	}
 
-	/**
-     * Counts the number of active Candidate entities in the database.
-     *
-     * @return The count of active Candidate entities.
-     * @throws RuntimeException If there's an issue with the database operation.
-     */
-	public int count() {
-		Connection con = null;
-		PreparedStatement ps = null;
-		ResultSet rs = null;
-		int count = 0;
-
-		List<Candidate> CandidateList = new ArrayList<Candidate>();
-		try {
-			String query = "SELECT * FROM Candidate Where is_active = 1";
-			con = ConnectionUtil.getConnection();
-			ps = con.prepareStatement(query);
-			rs = ps.executeQuery();
-
-			while (rs.next()) {
-				count++;
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-			System.out.println(e.getMessage());
-			throw new RuntimeException(e);
-		} finally {
-			ConnectionUtil.close(con, ps, rs);
-		}
-		return count;
-
-	}
 }

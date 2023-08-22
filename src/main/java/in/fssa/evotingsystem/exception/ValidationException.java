@@ -6,8 +6,8 @@ public class ValidationException extends Exception{
         super(message);
     }
 	
-	public ValidationException(Exception message) {
-        super(message);
+	public ValidationException(Exception exp) {
+        super(exp);
     }
 	
 }

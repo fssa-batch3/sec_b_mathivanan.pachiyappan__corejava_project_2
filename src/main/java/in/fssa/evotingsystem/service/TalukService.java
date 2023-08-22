@@ -2,74 +2,100 @@ package in.fssa.evotingsystem.service;
 
 import java.util.List;
 
+import com.google.protobuf.ServiceException;
+
 import in.fssa.evotingsystem.dao.TalukDAO;
+import in.fssa.evotingsystem.exception.PersistanceException;
 import in.fssa.evotingsystem.exception.ValidationException;
 import in.fssa.evotingsystem.model.Taluk;
 import in.fssa.evotingsystem.validator.TalukValidator;
 
 /**
- * The TalukService class provides methods to interact with the database and perform operations related to Taluk entities.
+ * This class provides services related to managing taluks.
  */
 public class TalukService {
-	
-	TalukDAO talukdao = new TalukDAO();
 
-	/**
-     * Creates a new Taluk entity in the database.
+    private TalukDAO talukdao = new TalukDAO();
+
+    /**
+     * Creates a new taluk.
      *
-     * @param taluk The Taluk object to be created.
-     * @return The created Taluk entity.
-     * @throws Exception If there's an issue with the database operation or validation.
+     * @param taluk The taluk to be created.
+     * @throws ServiceException If there was an issue creating the taluk.
+     * @throws ValidationException If the provided taluk data is not valid.
      */
-	public Taluk create(Taluk taluk) throws Exception {
+    public void create(Taluk taluk) throws ServiceException, ValidationException {
+        try {
+            TalukValidator.validate(taluk);
+            talukdao.create(taluk);
+        } catch (PersistanceException e) {
+            throw new ServiceException("Failed to Create Taluk");
+        }
+    }
 
-		TalukValidator.validate(taluk);
-
-		talukdao.create(taluk);
-		
-		return taluk;
-
-	}
-
-	/**
-     * Updates a Taluk entity's information in the database.
+    /**
+     * Updates an existing taluk's information.
      *
-     * @param newId The ID of the Taluk to be updated.
-     * @param newTaluk The updated Taluk object.
-     * @return The updated TalukDAO object.
-     * @throws ValidationException If the Taluk object is invalid or the operation fails.
+     * @param newId The ID of the taluk to be updated.
+     * @param newTaluk The updated taluk information.
+     * @throws ServiceException If there was an issue updating the taluk.
+     * @throws ValidationException If the provided taluk data is not valid.
      */
-	public TalukDAO update(int newId, Taluk newTaluk) throws ValidationException {
+    public void update(int newId, Taluk newTaluk) throws ServiceException, ValidationException {
+        try {
+            TalukValidator.validate(newTaluk);
+            TalukValidator.isIdExists(newId);
+            talukdao.update(newId, newTaluk);
+        } catch (PersistanceException e) {
+            throw new ServiceException("Failed to Update Taluk");
+        }
+    }
 
-		TalukValidator.validate(newTaluk);
-
-		talukdao.update(newId, newTaluk);
-		
-		return talukdao;
-
-	}
-
-	/**
-     * Marks a Taluk entity as inactive in the database.
+    /**
+     * Finds a taluk by its ID.
      *
-     * @param id The ID of the Taluk to be marked as inactive.
+     * @param id The ID of the taluk to be found.
+     * @return The found taluk, or null if not found.
+     * @throws ServiceException If there was an issue finding the taluk.
+     * @throws ValidationException If the provided taluk ID is not valid.
      */
-	public void delete(int Id) {
+    public Taluk findById(int id) throws ServiceException, ValidationException {
+        try {
+            TalukValidator.validateId(id);
+            return talukdao.findById(id);
+        } catch (PersistanceException e) {
+            throw new ServiceException("Failed to Find Taluk");
+        }
+    }
 
-		talukdao.delete(Id);
-
-	}
-
-
-	/**
-     * Retrieves a list of all active Taluk entities from the database.
+    /**
+     * Deletes a taluk by ID.
      *
-     * @return A list of Taluk entities.
+     * @param id The ID of the taluk to be deleted.
+     * @throws ServiceException If there was an issue deleting the taluk.
+     * @throws ValidationException If the provided taluk ID is not valid.
      */
-	public List<Taluk> getAll() {
+    public void delete(int id) throws ServiceException, ValidationException {
+        try {
+            TalukValidator.validateId(id);
+            TalukValidator.isIdExists(id);
+            talukdao.delete(id);
+        } catch (PersistanceException e) {
+            throw new ServiceException("Failed to Delete Taluk");
+        }
+    }
 
-		return talukdao.findAll();
-
-	}
-
+    /**
+     * Retrieves a list of all taluks.
+     *
+     * @return The list of all taluks.
+     * @throws ServiceException If there was an issue retrieving the taluks.
+     */
+    public List<Taluk> getAll() throws ServiceException {
+        try {
+            return talukdao.findAll();
+        } catch (PersistanceException e) {
+            throw new ServiceException("Failed to List All Taluks");
+        }
+    }
 }

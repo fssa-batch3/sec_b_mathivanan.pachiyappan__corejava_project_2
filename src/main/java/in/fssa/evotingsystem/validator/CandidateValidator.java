@@ -3,6 +3,7 @@ package in.fssa.evotingsystem.validator;
 import java.time.LocalDate;
 
 import in.fssa.evotingsystem.dao.CandidateDAO;
+import in.fssa.evotingsystem.exception.PersistanceException;
 import in.fssa.evotingsystem.exception.ValidationException;
 import in.fssa.evotingsystem.model.Candidate;
 import in.fssa.evotingsystem.util.StringUtil;
@@ -47,7 +48,12 @@ public class CandidateValidator {
 		validateId(id);
 
 		CandidateDAO cd = new CandidateDAO();
-		Candidate candidate = cd.findById(id);
+		Candidate candidate;
+		try {
+			candidate = cd.findById(id);
+		}  catch (PersistanceException e) {
+			throw new ValidationException(e.getMessage());
+		}
 
 		if (candidate == null) {
 			throw new ValidationException("Candidate not exists");

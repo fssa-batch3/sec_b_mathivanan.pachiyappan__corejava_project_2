@@ -6,46 +6,41 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.Test;
 
 import in.fssa.evotingsystem.exception.ValidationException;
-import in.fssa.evotingsystem.model.User;
-import in.fssa.evotingsystem.service.UserService;
+import in.fssa.evotingsystem.model.Taluk;
+import in.fssa.evotingsystem.service.TalukService;
 
-public class TestUpdateUser {
+public class TestUpdateTaluk {
 
 	@Test
-	public void testUpdateUserServices() {
+	public void testUpdateTalukServices() {
 
-		UserService userService = new UserService();
+		TalukService talukService = new TalukService();
 
-		User newUser = new User();
+		Taluk newTaluk = new Taluk();
 
-//		newUser .setPhoneNumber(9876543212L);
-		newUser.setPassword("hbihbibiio");
-		newUser.setAddress("123 Main St, City");
-		newUser.setTalukId(1); // Assuming 1 is a valid taluk ID
+		newTaluk.setTalukName("U1");
 
 		Exception exception = assertThrows(ValidationException.class, () -> {
 
-			userService.update(10022, newUser);
+			talukService.update(1001, newTaluk);
 		});
 
 		String except = exception.getMessage();
-		String message = "User not exsists";
+		String message = "Taluk not exsists";
 
 		assertTrue(except.equals(message));
-
 	}
 
 	@Test
-	public void testDeleteUserWithInvalidId() {
+	public void testDeleteTalukWithInvalidId() {
 
-		UserService userService = new UserService();
+		TalukService talukService = new TalukService();
 		Exception exception = assertThrows(ValidationException.class, () -> {
-			userService.delete(-2);
+			talukService.delete(-2);
 		});
 		String expectedMessage = "Id can not be 0 or negative";
 		String actualMessage = exception.getMessage();
 		assertTrue(expectedMessage.equals(actualMessage));
 
 	}
-
 }

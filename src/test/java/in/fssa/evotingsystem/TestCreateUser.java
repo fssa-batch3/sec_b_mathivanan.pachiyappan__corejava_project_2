@@ -18,13 +18,11 @@ public class TestCreateUser {
 
 		User newUser = new User();
 
-		newUser.setId(10);
 		newUser.setPhoneNumber(8608285560L);
 		newUser.setPassword("Njcat#10van");
 		newUser.setAddress("112 Main St, City");
 		newUser.setVoterId(6782);
 		newUser.setTalukId(1); // Assuming 1 is a valid taluk ID
-		newUser.setActive(true);
 
 		assertDoesNotThrow(() -> {
 			userService.create(newUser);
@@ -49,13 +47,11 @@ public class TestCreateUser {
 
 			User newUser = new User();
 
-			newUser.setId(12345);
 			newUser.setPhoneNumber(-9876543210L); // Negative phone number
 			newUser.setPassword("Njcat#10van");
 			newUser.setAddress("123 Main St, City");
 			newUser.setVoterId(12345);
 			newUser.setTalukId(1); // Assuming 1 is a valid taluk ID
-			newUser.setActive(true);
 
 			userService.create(newUser);
 		});
@@ -71,13 +67,11 @@ public class TestCreateUser {
 
 			User newUser = new User();
 
-			newUser.setId(12345);
 			newUser.setPhoneNumber(9876543210L); // Negative phone number
 			newUser.setPassword("");
 			newUser.setAddress("123 Main St, City");
 			newUser.setVoterId(12345);
 			newUser.setTalukId(1); // Assuming 1 is a valid taluk ID
-			newUser.setActive(true);
 
 			userService.create(newUser);
 		});
@@ -93,13 +87,11 @@ public class TestCreateUser {
 
 			User newUser = new User();
 
-			newUser.setId(12345);
 			newUser.setPhoneNumber(9876543210L); // Negative phone number
 			newUser.setPassword(null);
 			newUser.setAddress("123 Main St, City");
 			newUser.setVoterId(12345);
 			newUser.setTalukId(1); // Assuming 1 is a valid taluk ID
-			newUser.setActive(true);
 			
 			userService.create(newUser);
 		});
@@ -115,13 +107,11 @@ public class TestCreateUser {
 
 			User newUser = new User();
 
-			newUser.setId(12345);
 			newUser.setPhoneNumber(9876543210L); // Negative phone number
 			newUser.setPassword("Njcat#10van");
 			newUser.setAddress("");
 			newUser.setVoterId(12345);
 			newUser.setTalukId(1); // Assuming 1 is a valid taluk ID
-			newUser.setActive(true);
 
 			userService.create(newUser);
 		});
@@ -137,13 +127,11 @@ public class TestCreateUser {
 
 			User newUser = new User();
 
-			newUser.setId(12345);
 			newUser.setPhoneNumber(9876543210L); // Negative phone number
 			newUser.setPassword("Njcat#10van");
 			newUser.setAddress(null);
 			newUser.setVoterId(12345);
 			newUser.setTalukId(1); // Assuming 1 is a valid taluk ID
-			newUser.setActive(true);
 			
 			userService.create(newUser);
 		});
@@ -158,14 +146,12 @@ public class TestCreateUser {
 		Exception exception = assertThrows(ValidationException.class, () -> {
 
 			User newUser = new User();
-
-			newUser.setId(1);
+			
 			newUser.setPhoneNumber(1234565890L);
 			newUser.setPassword("Njcat#10van");
 			newUser.setAddress("123 Main St, City");
 			newUser.setVoterId(-2);
 			newUser.setTalukId(1); 
-			newUser.setActive(true);
 
 			userService.create(newUser);
 		});
@@ -181,13 +167,11 @@ public class TestCreateUser {
 
 			User newUser = new User();
 
-			newUser.setId(12345);
 			newUser.setPhoneNumber(9876543210L);
 			newUser.setPassword("Njcat#10van");
 			newUser.setAddress("123 Main St, City");
 			newUser.setVoterId(12345);
 			newUser.setTalukId(-1); // Invalid negative taluk ID
-			newUser.setActive(true);
 
 			userService.create(newUser);
 		});
@@ -203,13 +187,11 @@ public class TestCreateUser {
 
 			User newUser = new User();
 
-			newUser.setId(101);
 			newUser.setPhoneNumber(1234567890L);
 			newUser.setPassword("Njcat#10van");
 			newUser.setAddress("123 Main St, City");
 			newUser.setVoterId(12345);
 			newUser.setTalukId(1); // Assuming 1 is a valid taluk ID
-			newUser.setActive(true);
 
 			userService.create(newUser);
 		});
