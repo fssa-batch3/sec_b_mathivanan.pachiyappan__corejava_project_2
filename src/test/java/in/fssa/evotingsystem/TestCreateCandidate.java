@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.time.LocalDate;
+import java.util.Random;
 
 import org.junit.jupiter.api.Test;
 
@@ -18,14 +19,22 @@ public class TestCreateCandidate {
 	public void testCreateCandidateWithValidData() {
 		CandidateService candidateService = new CandidateService();
 
+		int min = 600000001;
+		int max = 999999999;
+		int genarate = 1000;
+		Random rand = new Random();
+		int randNum = 0;
+
+		for (int i = 0; i < genarate; i++) {
+			randNum = rand.nextInt(max - min + 1) + min;
+		}
+
 		Candidate newCandidate = new Candidate();
 
-		newCandidate.setId(621);
-		newCandidate.setUserId(101);
-		newCandidate.setElectionId(20);
+		newCandidate.setCandidateId(randNum);
+		newCandidate.setElectionId(2);
 		newCandidate.setCandidateName("Modi");
-		newCandidate.setCreatedAt(LocalDate.of(2023, 12, 12));
-		newCandidate.setActive(true);
+		newCandidate.setCreatedAt(LocalDate.of(2023, 12, 3));
 
 		assertDoesNotThrow(() -> {
 			candidateService.create(newCandidate);
@@ -50,12 +59,10 @@ public class TestCreateCandidate {
 
 			Candidate newCandidate = new Candidate();
 
-			newCandidate.setId(1);
-			newCandidate.setUserId(101);
+			newCandidate.setCandidateId(27456);
 			newCandidate.setElectionId(202);
 			newCandidate.setCandidateName("");
 			newCandidate.setCreatedAt(LocalDate.of(2023, 12, 12));
-			newCandidate.setActive(true);
 
 			candidateService.create(newCandidate);
 		});
@@ -71,13 +78,11 @@ public class TestCreateCandidate {
 
 			Candidate newCandidate = new Candidate();
 
-			newCandidate.setId(1);
-			newCandidate.setUserId(101);
+			newCandidate.setCandidateId(16457);
 			newCandidate.setElectionId(202);
 			newCandidate.setCandidateName(null);
 			newCandidate.setCreatedAt(LocalDate.of(2023, 12, 12));
-			newCandidate.setActive(true);
-			
+
 			candidateService.create(newCandidate);
 		});
 		String expectedMessage = "Candidate Name cannot be Null or Empty";
@@ -92,16 +97,14 @@ public class TestCreateCandidate {
 
 			Candidate newCandidate = new Candidate();
 
-			newCandidate.setId(18);
-			newCandidate.setUserId(-101);
+			newCandidate.setCandidateId(-1);
 			newCandidate.setElectionId(202);
 			newCandidate.setCandidateName("Modi");
 			newCandidate.setCreatedAt(LocalDate.of(2023, 12, 12));
-			newCandidate.setActive(true);
 
 			candidateService.create(newCandidate);
 		});
-		String expectedMessage = "User ID cannot be 0 or negative";
+		String expectedMessage = "Candidate ID cannot be 0 or negative";
 		String actualMessage = exception.getMessage();
 		assertTrue(expectedMessage.equals(actualMessage));
 	}
@@ -113,37 +116,14 @@ public class TestCreateCandidate {
 
 			Candidate newCandidate = new Candidate();
 
-			newCandidate.setId(1);
-			newCandidate.setUserId(101);
+			newCandidate.setCandidateId(1);
 			newCandidate.setElectionId(-202);
 			newCandidate.setCandidateName("Modi");
 			newCandidate.setCreatedAt(LocalDate.of(2023, 12, 12));
-			newCandidate.setActive(true);
-
+			
 			candidateService.create(newCandidate);
 		});
 		String expectedMessage = "Invalid Election ID";
-		String actualMessage = exception.getMessage();
-		assertTrue(expectedMessage.equals(actualMessage));
-	}
-	
-	@Test
-	public void testCreateCandidateWithExistingId () {
-		CandidateService candidateService = new CandidateService();
-		Exception exception = assertThrows(RuntimeException.class, () -> {
-
-			Candidate newCandidate = new Candidate();
-
-			newCandidate.setId(12244);
-			newCandidate.setUserId(101);
-			newCandidate.setElectionId(202);
-			newCandidate.setCandidateName("Modi");
-			newCandidate.setCreatedAt(LocalDate.of(2023, 12, 12));
-			newCandidate.setActive(true);
-
-			candidateService.create(newCandidate);
-		});
-		String expectedMessage = "Duplicate constraint";
 		String actualMessage = exception.getMessage();
 		assertTrue(expectedMessage.equals(actualMessage));
 	}

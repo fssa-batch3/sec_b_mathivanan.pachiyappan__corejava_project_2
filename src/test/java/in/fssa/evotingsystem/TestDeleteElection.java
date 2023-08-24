@@ -1,28 +1,37 @@
 package in.fssa.evotingsystem;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
-import in.fssa.evotingsystem.model.Election;
+import in.fssa.evotingsystem.dao.ElectionDAO;
+import in.fssa.evotingsystem.exception.ValidationException;
 import in.fssa.evotingsystem.service.ElectionService;
 
 public class TestDeleteElection {
-	
+
 	@Test
-	public void testDeleteElection() {
-		
-		ElectionService electioService = new ElectionService();
-		
-		Election deleteElection = new Election();
-		
-		
-		deleteElection.setActive(false);
-		
+	void testDeleteElection() {
 		assertDoesNotThrow(() -> {
-			
-			electioService.delete(1);
+			ElectionService electionService = new ElectionService();
+			ElectionDAO app = new ElectionDAO();
+			app.changeActive(1);
+			electionService.delete(1);
 		});
 	}
 
+	@Test
+	public void testDeleteElectionWithInvalidId() {
+
+		ElectionService electionService = new ElectionService();
+		Exception exception = assertThrows(ValidationException.class, () -> {
+			electionService.delete(-2);
+		});
+		String expectedMessage = "ID can not be 0 or negative";
+		String actualMessage = exception.getMessage();
+		assertTrue(expectedMessage.equals(actualMessage));
+
+	}
 }

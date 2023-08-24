@@ -7,7 +7,7 @@ public class CandidateEntity implements Comparable<CandidateEntity> {
 	protected int Id;
 	protected String candidateName;
 	protected int electionId;
-	protected int userId;
+	protected int candidateId;
 	protected LocalDate createdAt;
 	protected boolean isActive;
 
@@ -35,12 +35,12 @@ public class CandidateEntity implements Comparable<CandidateEntity> {
 		this.electionId = electionId;
 	}
 
-	public int getUserId() {
-		return userId;
+	public int getCandidateId() {
+		return candidateId;
 	}
 
-	public void setUserId(int userId) {
-		this.userId = userId;
+	public void setCandidateId(int candidateId) {
+		this.candidateId = candidateId;
 	}
 
 	public LocalDate getCreatedAt() {
@@ -62,7 +62,7 @@ public class CandidateEntity implements Comparable<CandidateEntity> {
 	@Override
 	public String toString() {
 		return "CandidateEntity [Id=" + this.getId() + ", candidateName=" + this.getCandidateName() + ", electionId="
-				+ this.getElectionId() + ", userId=" + this.getUserId() + ", createdAt=" + this.getCreatedAt()
+				+ this.getElectionId() + ", userId=" + this.getCandidateId() + ", createdAt=" + this.getCreatedAt()
 				+ ", isActive=" + this.isActive() + "]";
 	}
 

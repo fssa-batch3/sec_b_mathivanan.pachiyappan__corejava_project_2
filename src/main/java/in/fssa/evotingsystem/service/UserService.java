@@ -46,11 +46,12 @@ public class UserService {
 	public void update(int newId, User newUser) throws ServiceException, ValidationException {
 
 		try {
-			UserValidator.validate(newUser);
 			UserValidator.isIdExists(newId);
+			UserValidator.validate(newUser);
+		
 			userdao.update(newId, newUser);
 		} catch (PersistanceException e) {
-			throw new ServiceException("Failed to Delete Price");
+			throw new ServiceException("Failed to Update User");
 		}
 
 	}

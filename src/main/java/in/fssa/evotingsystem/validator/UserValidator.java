@@ -1,6 +1,5 @@
 package in.fssa.evotingsystem.validator;
 
-import java.util.Objects;
 
 import in.fssa.evotingsystem.dao.UserDAO;
 import in.fssa.evotingsystem.exception.PersistanceException;
@@ -28,10 +27,6 @@ public class UserValidator {
 			throw new ValidationException("Invalid User Input");
 		}
 
-		if (Objects.isNull(newUser.getPassword())) {
-			throw new ValidationException("Password cannot be Null or Empty");
-		}
-
 		if (newUser.getPassword() == null || newUser.getPassword().trim().isEmpty()) {
 			throw new ValidationException("Password cannot be Null or Empty");
 		}
@@ -47,6 +42,8 @@ public class UserValidator {
 		if (newUser.getPhoneNumber() <= 600000001L || newUser.getPhoneNumber() >= 9999999999L) {
 			throw new ValidationException("Invalid Phone Number");
 		}
+
+		isPhoneNumberExists(newUser.getPhoneNumber());
 
 		if (newUser.getVoterId() <= 0 || newUser.getVoterId() >= 999999999) {
 			throw new ValidationException("Invalid Voter ID");
@@ -81,7 +78,7 @@ public class UserValidator {
 		}
 
 		if (user == null) {
-			throw new ValidationException("User not exsists");
+			throw new ValidationException("User not exists");
 		}
 
 	}
@@ -99,6 +96,26 @@ public class UserValidator {
 			throw new ValidationException("Id can not be 0 or negative");
 		}
 
+	}
+
+	/**
+	 * Checks if a phone number already exists in the database.
+	 *
+	 * @param phoneNumber The phone number to check.
+	 * @throws ValidationException If the phone number is not valid or if it already
+	 *                             exists.
+	 */
+	public static void isPhoneNumberExists(long phoneNumber) throws ValidationException {
+
+		UserDAO userdao = new UserDAO();
+		try {
+			User existingUser = userdao.findByPhoneNumber(phoneNumber);
+			if (existingUser != null) {
+				throw new ValidationException("Phone number already exists");
+			}
+		} catch (PersistanceException e) {
+			throw new ValidationException(e.getMessage());
+		}
 	}
 
 	private static boolean isValidPassword(String password) {

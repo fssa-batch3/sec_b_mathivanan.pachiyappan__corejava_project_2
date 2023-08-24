@@ -1,5 +1,6 @@
 package in.fssa.evotingsystem;
 
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -15,28 +16,152 @@ import in.fssa.evotingsystem.service.ElectionService;
 public class TestUpdateElection {
 
 	@Test
-	public void testUpdateElectionServices() {
+	public void testUpdateElectionWithValidData() {
 
-		ElectionService userService = new ElectionService();
+		ElectionService electionService = new ElectionService();
 
-		Election newUser = new Election();
+		Election newElection = new Election();
+		
+		newElection.setBoothAddress("Coomunity Mahal");
+		newElection.setElectionName("Prime minister election 2023");
+		newElection.setElectionDate(LocalDate.of(2023, 9, 12));
+		newElection.setTalukId(1);
 
-		newUser.setId(2);
-		newUser.setBoothAddress("Community hall");
-		newUser.setElectionName("Prime minister election 2023");
-		newUser.setElectionDate(LocalDate.of(2023, 9, 12));
-		newUser.setTalukId(1);
-		newUser.setActive(true);
-
-		Exception exception = assertThrows(ValidationException.class, () -> {
-
-			userService.update(21, newUser);
+		assertDoesNotThrow(() -> {
+			electionService.update(10, newElection);
 		});
 
-		String except = exception.getMessage();
-		String message = "Election not exist";
+	}
+	
+	@Test
+	public void testDeleteElectionWithInvalidId() {
 
-		assertTrue(except.equals(message));
+		ElectionService electionService = new ElectionService();
+		Exception exception = assertThrows(ValidationException.class, () -> {
+			electionService.delete(-2);
+		});
+		String expectedMessage = "ID can not be 0 or negative";
+		String actualMessage = exception.getMessage();
+		assertTrue(expectedMessage.equals(actualMessage));
 
 	}
+	
+	@Test
+	public void testUpdateElectionWithBoothAddressEmpty() {
+		ElectionService electionService = new ElectionService();
+		Exception exception = assertThrows(ValidationException.class, () -> {
+
+			Election newElection = new Election();
+
+			newElection.setBoothAddress("");
+			newElection.setElectionName("Prime minister election 2023");
+			newElection.setElectionDate(LocalDate.of(2023, 3, 12));
+			newElection.setTalukId(1);
+
+			electionService.create(newElection);
+		});
+		String expectedMessage = "Booth Address cannot be Null or Empty";
+		String actualMessage = exception.getMessage();
+		assertTrue(expectedMessage.equals(actualMessage));
+	}
+
+	@Test
+	public void testUpdateElectionWithBoothAddressNull() {
+		ElectionService electionService = new ElectionService();
+		Exception exception = assertThrows(ValidationException.class, () -> {
+
+			Election newElection = new Election();
+
+			newElection.setBoothAddress(null);
+			newElection.setElectionName("Prime minister election 2023");
+			newElection.setElectionDate(LocalDate.of(2023, 3, 12));
+			newElection.setTalukId(1);
+
+			electionService.create(newElection);
+		});
+		String expectedMessage = "Booth Address cannot be Null or Empty";
+		String actualMessage = exception.getMessage();
+		assertTrue(expectedMessage.equals(actualMessage));
+	}
+
+	@Test
+	public void testUpdateElectionWithElectionNameEmpty() {
+		ElectionService electionService = new ElectionService();
+		Exception exception = assertThrows(ValidationException.class, () -> {
+
+			Election newElection = new Election();
+
+			newElection.setBoothAddress("Community hall");
+			newElection.setElectionName("");
+			newElection.setElectionDate(LocalDate.of(2023, 3, 12));
+			newElection.setTalukId(1);
+
+			electionService.create(newElection);
+
+		});
+		String expectedMessage = "Election Name cannot be Null or Empty";
+		String actualMessage = exception.getMessage();
+		assertTrue(expectedMessage.equals(actualMessage));
+	}
+
+	@Test
+	public void testUpdateElectionWithElectionNameNUll() {
+		ElectionService electionService = new ElectionService();
+		Exception exception = assertThrows(ValidationException.class, () -> {
+
+			Election newElection = new Election();
+
+			newElection.setBoothAddress("Community hall");
+			newElection.setElectionName(null);
+			newElection.setElectionDate(LocalDate.of(2023, 3, 12));
+			newElection.setTalukId(1);
+
+			electionService.create(newElection);
+
+		});
+		String expectedMessage = "Election Name cannot be Null or Empty";
+		String actualMessage = exception.getMessage();
+		assertTrue(expectedMessage.equals(actualMessage));
+	}
+
+	@Test
+	public void testUpdateElectionWithInvalidDate() {
+		ElectionService electionService = new ElectionService();
+		Exception exception = assertThrows(ValidationException.class, () -> {
+
+			Election newElection = new Election();
+
+			newElection.setBoothAddress("Community hall");
+			newElection.setElectionName("Prime minister election 2023");
+			newElection.setElectionDate(LocalDate.of(2023, 3, 12));
+			newElection.setTalukId(1);
+
+			electionService.create(newElection);
+
+		});
+		String expectedMessage = "Invalid Election Date";
+		String actualMessage = exception.getMessage();
+		assertTrue(expectedMessage.equals(actualMessage));
+	}
+
+	@Test
+	public void testUpdateElectionWithInvalidTalukId() {
+		ElectionService electionService = new ElectionService();
+		Exception exception = assertThrows(ValidationException.class, () -> {
+
+			Election newElection = new Election();
+
+			newElection.setBoothAddress("Community hall");
+			newElection.setElectionName("Prime minister election 2023");
+			newElection.setElectionDate(LocalDate.of(2023, 3, 12));
+			newElection.setTalukId(-1);
+
+			electionService.create(newElection);
+
+		});
+		String expectedMessage = "Invalid Taluk ID";
+		String actualMessage = exception.getMessage();
+		assertTrue(expectedMessage.equals(actualMessage));
+	}
+
 }

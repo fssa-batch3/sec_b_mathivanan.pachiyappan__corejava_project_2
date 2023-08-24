@@ -54,7 +54,7 @@ public class ElectionValidator {
 		}
 
         if (election == null) {
-			throw new ValidationException("Election not exist");
+			throw new ValidationException("Election not exists");
         }
     }
 
@@ -66,7 +66,7 @@ public class ElectionValidator {
      */
     public static void validateId(int id) throws ValidationException {
         if (id < 1) {
-            throw new ValidationException("ID cannot be 0 or negative");
+            throw new ValidationException("ID can not be 0 or negative");
         }
     }
 

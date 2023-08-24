@@ -20,12 +20,10 @@ public class TestCreateElection {
 
 		Election newElection = new Election();
 
-//		newElection.setId(194);
-		newElection.setBoothAddress(null);
-		newElection.setElectionName(null);
-		newElection.setElectionDate(null);
+		newElection.setBoothAddress("Community Mahall");
+		newElection.setElectionName("Prime minister election 2023");
+		newElection.setElectionDate(LocalDate.of(2023, 12, 3));
 		newElection.setTalukId(1);
-//		newElection.setActive(true);
 
 		assertDoesNotThrow(() -> {
 			electionService.create(newElection);
@@ -50,12 +48,10 @@ public class TestCreateElection {
 
 			Election newElection = new Election();
 
-			newElection.setId(1);
 			newElection.setBoothAddress("");
 			newElection.setElectionName("Prime minister election 2023");
 			newElection.setElectionDate(LocalDate.of(2023, 3, 12));
 			newElection.setTalukId(1);
-			newElection.setActive(true);
 
 			electionService.create(newElection);
 		});
@@ -71,12 +67,10 @@ public class TestCreateElection {
 
 			Election newElection = new Election();
 
-			newElection.setId(1);
 			newElection.setBoothAddress(null);
 			newElection.setElectionName("Prime minister election 2023");
 			newElection.setElectionDate(LocalDate.of(2023, 3, 12));
 			newElection.setTalukId(1);
-			newElection.setActive(true);
 
 			electionService.create(newElection);
 		});
@@ -92,12 +86,10 @@ public class TestCreateElection {
 
 			Election newElection = new Election();
 
-			newElection.setId(1);
 			newElection.setBoothAddress("Community hall");
 			newElection.setElectionName("");
 			newElection.setElectionDate(LocalDate.of(2023, 3, 12));
 			newElection.setTalukId(1);
-			newElection.setActive(true);
 
 			electionService.create(newElection);
 
@@ -114,12 +106,10 @@ public class TestCreateElection {
 
 			Election newElection = new Election();
 
-			newElection.setId(1);
 			newElection.setBoothAddress("Community hall");
 			newElection.setElectionName(null);
 			newElection.setElectionDate(LocalDate.of(2023, 3, 12));
 			newElection.setTalukId(1);
-			newElection.setActive(true);
 
 			electionService.create(newElection);
 
@@ -136,12 +126,10 @@ public class TestCreateElection {
 
 			Election newElection = new Election();
 
-			newElection.setId(1);
 			newElection.setBoothAddress("Community hall");
 			newElection.setElectionName("Prime minister election 2023");
 			newElection.setElectionDate(LocalDate.of(2023, 3, 12));
 			newElection.setTalukId(1);
-			newElection.setActive(true);
 
 			electionService.create(newElection);
 
@@ -158,39 +146,15 @@ public class TestCreateElection {
 
 			Election newElection = new Election();
 
-			newElection.setId(1);
 			newElection.setBoothAddress("Community hall");
 			newElection.setElectionName("Prime minister election 2023");
 			newElection.setElectionDate(LocalDate.of(2023, 3, 12));
 			newElection.setTalukId(-1);
-			newElection.setActive(true);
 
 			electionService.create(newElection);
 
 		});
 		String expectedMessage = "Invalid Taluk ID";
-		String actualMessage = exception.getMessage();
-		assertTrue(expectedMessage.equals(actualMessage));
-	}
-
-	@Test
-	public void testCreateElectionAlreadyExsistElectionId() {
-		ElectionService electionService = new ElectionService();
-		Exception exception = assertThrows(RuntimeException.class, () -> {
-
-			Election newElection = new Election();
-
-			newElection.setId(1);
-			newElection.setBoothAddress("Community hall");
-			newElection.setElectionName("Prime minister election 2023");
-			newElection.setElectionDate(LocalDate.of(2023, 10, 12));
-			newElection.setTalukId(1);
-			newElection.setActive(true);
-
-			electionService.create(newElection);
-
-		});
-		String expectedMessage = "Duplicate constraint";
 		String actualMessage = exception.getMessage();
 		assertTrue(expectedMessage.equals(actualMessage));
 	}

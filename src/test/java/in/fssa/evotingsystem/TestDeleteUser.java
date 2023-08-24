@@ -6,22 +6,22 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
+import in.fssa.evotingsystem.dao.UserDAO;
 import in.fssa.evotingsystem.exception.ValidationException;
 import in.fssa.evotingsystem.service.UserService;
 
 public class TestDeleteUser {
 
 	@Test
-	public void testDeleteUser() {
-
-		UserService userService = new UserService();
-
+	void testDeleteUser() {
 		assertDoesNotThrow(() -> {
-
-			userService.delete(2);
+			UserService userService = new UserService();
+			UserDAO app = new UserDAO();
+			app.changeActive(1);
+			userService.delete(1);
 		});
 	}
-	
+
 	@Test
 	public void testDeleteUserWithInvalidId() {
 

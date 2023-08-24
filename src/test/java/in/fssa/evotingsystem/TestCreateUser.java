@@ -4,6 +4,8 @@ import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.util.Random;
+
 import org.junit.jupiter.api.Test;
 
 import in.fssa.evotingsystem.exception.ValidationException;
@@ -14,11 +16,22 @@ public class TestCreateUser {
 
 	@Test
 	public void testCreateUserWithValidData() {
+
 		UserService userService = new UserService();
+
+		long min = 600000001l;
+		long max = 9999999999l;
+		int genarate = 1000;
+		Random rand = new Random();
+		long randNum = 0;
+
+		for (int i = 0; i < genarate; i++) {
+			randNum = rand.nextLong(max - min + 1) + min;
+		}
 
 		User newUser = new User();
 
-		newUser.setPhoneNumber(8608285560L);
+		newUser.setPhoneNumber(randNum);
 		newUser.setPassword("Njcat#10van");
 		newUser.setAddress("112 Main St, City");
 		newUser.setVoterId(6782);
@@ -92,14 +105,14 @@ public class TestCreateUser {
 			newUser.setAddress("123 Main St, City");
 			newUser.setVoterId(12345);
 			newUser.setTalukId(1); // Assuming 1 is a valid taluk ID
-			
+
 			userService.create(newUser);
 		});
 		String expectedMessage = "Password cannot be Null or Empty";
 		String actualMessage = exception.getMessage();
 		assertTrue(expectedMessage.equals(actualMessage));
 	}
-	
+
 	@Test
 	public void testCreateUserWithAddressEmpty() {
 		UserService userService = new UserService();
@@ -132,7 +145,7 @@ public class TestCreateUser {
 			newUser.setAddress(null);
 			newUser.setVoterId(12345);
 			newUser.setTalukId(1); // Assuming 1 is a valid taluk ID
-			
+
 			userService.create(newUser);
 		});
 		String expectedMessage = "Address cannot be Null or Empty";
@@ -146,12 +159,12 @@ public class TestCreateUser {
 		Exception exception = assertThrows(ValidationException.class, () -> {
 
 			User newUser = new User();
-			
+
 			newUser.setPhoneNumber(1234565890L);
 			newUser.setPassword("Njcat#10van");
 			newUser.setAddress("123 Main St, City");
 			newUser.setVoterId(-2);
-			newUser.setTalukId(1); 
+			newUser.setTalukId(1);
 
 			userService.create(newUser);
 		});
@@ -159,7 +172,7 @@ public class TestCreateUser {
 		String actualMessage = exception.getMessage();
 		assertTrue(expectedMessage.equals(actualMessage));
 	}
-	
+
 	@Test
 	public void testCreateUserWithInvalidTalukId() {
 		UserService userService = new UserService();
@@ -179,15 +192,15 @@ public class TestCreateUser {
 		String actualMessage = exception.getMessage();
 		assertTrue(expectedMessage.equals(actualMessage));
 	}
-	
+
 	@Test
-	public void testCreateUserWithExistingPhoneNumber () {
+	public void testCreateUserWithExistingPhoneNumber() {
 		UserService userService = new UserService();
-		Exception exception = assertThrows(RuntimeException.class, () -> {
+		Exception exception = assertThrows(ValidationException.class, () -> {
 
 			User newUser = new User();
 
-			newUser.setPhoneNumber(1234567890L);
+			newUser.setPhoneNumber(8208285560L);
 			newUser.setPassword("Njcat#10van");
 			newUser.setAddress("123 Main St, City");
 			newUser.setVoterId(12345);
@@ -195,7 +208,7 @@ public class TestCreateUser {
 
 			userService.create(newUser);
 		});
-		String expectedMessage = "Duplicate constraint";
+		String expectedMessage = "Phone number already exists";
 		String actualMessage = exception.getMessage();
 		assertTrue(expectedMessage.equals(actualMessage));
 	}

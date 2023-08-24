@@ -107,13 +107,12 @@ public class UserDAO implements UserInterface {
 		PreparedStatement ps = null;
 
 		try {
-			String query = "UPDATE users SET address = ?,taluk_id = ? Where id = ?";
+			String query = "UPDATE users SET password = ?, address = ?, taluk_id = ? Where is_active = 1";
 			con = ConnectionUtil.getConnection();
 			ps = con.prepareStatement(query);
 			ps.setString(1, newUser.getAddress());
 			ps.setString(2, newUser.getPassword());
 			ps.setInt(3, newUser.getTalukId());
-			ps.setInt(4, id);
 
 			ps.executeUpdate();
 
@@ -127,6 +126,49 @@ public class UserDAO implements UserInterface {
 			ConnectionUtil.close(con, ps);
 		}
 
+	}
+
+	/**
+	 * Find a user by their phone number.
+	 *
+	 * @param phoneNumber The phone number to search for.
+	 * @return The User object if found, null otherwise.
+	 * @throws PersistanceException If there's an issue with database access.
+	 */
+	public User findByPhoneNumber(long userPhoneNo) throws PersistanceException {
+		Connection con = null;
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+
+		User user = null;
+
+		try {
+			String query = "SELECT * FROM users  WHERE is_active = 1 and phone_number = ? ";
+			con = ConnectionUtil.getConnection();
+			ps = con.prepareStatement(query);
+			ps.setLong(1, userPhoneNo);
+			rs = ps.executeQuery();
+
+			if (rs.next()) {
+				user = new User();
+				user.setId(rs.getInt("id"));
+				user.setPhoneNumber(rs.getLong("phone_number"));
+				user.setAddress(rs.getString("address"));
+				user.setVoterId(rs.getInt("voter_id"));
+				user.setTalukId(rs.getInt("taluk_id"));
+				user.setActive(rs.getBoolean("is_active"));
+				user.setPassword(rs.getString("password"));
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+			System.out.println(e.getMessage());
+			throw new PersistanceException(e);
+		} finally {
+			ConnectionUtil.close(con, ps, rs);
+		}
+
+		return user;
 	}
 
 	/**
@@ -220,6 +262,28 @@ public class UserDAO implements UserInterface {
 
 		return userList;
 
+	}
+
+	public void changeActive(int newId) throws PersistanceException {
+		Connection con = null;
+		PreparedStatement ps = null;
+
+		try {
+			String query = "UPDATE users SET is_active = 1 WHERE id = ?";
+			con = ConnectionUtil.getConnection();
+			ps = con.prepareStatement(query);
+//	        ps.setBoolean(1, false);
+			ps.setInt(1, newId);
+
+			ps.executeUpdate();
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+			System.out.println(e.getMessage());
+			throw new PersistanceException(e);
+		} finally {
+			ConnectionUtil.close(con, ps);
+		}
 	}
 
 }

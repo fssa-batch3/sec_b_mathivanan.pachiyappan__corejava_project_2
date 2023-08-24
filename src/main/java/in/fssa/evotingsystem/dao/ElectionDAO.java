@@ -112,7 +112,7 @@ public class ElectionDAO implements ElectionInterface{
 		PreparedStatement ps = null;
 
 		try {
-			String query = "UPDATE elections SET booth_address = ?,taluk_id = ? Where id = ?";
+			String query = "UPDATE elections SET booth_address = ?, election_name = ?, election_date = ?, taluk_id = ? Where is_active = 1";
 			con = ConnectionUtil.getConnection();
 			ps = con.prepareStatement(query);
 			ps.setString(1, newElection.getBoothAddress());
@@ -121,9 +121,8 @@ public class ElectionDAO implements ElectionInterface{
 			java.util.Date dueDateUtil = ElectionService.convertDate(newElection.getElectionDate());
 			java.sql.Date dueDateSql = new java.sql.Date(dueDateUtil.getTime());
 
-			ps.setDate(2, dueDateSql);
-			
-			ps.setInt(3, id);
+			ps.setDate(3, dueDateSql);
+			ps.setInt(4, newElection.getTalukId());
 
 			ps.executeUpdate();
 
@@ -153,7 +152,7 @@ public class ElectionDAO implements ElectionInterface{
 		Election matchedElection = null;
 
 		try {
-			String query = "SELECT * FROM elections WHERE id = ? AND is_active = 1";
+			String query = "SELECT * FROM elections WHERE is_active = 1 AND id = ?";
 			con = ConnectionUtil.getConnection();
 			ps = con.prepareStatement(query);
 			ps.setInt(1, Id);
@@ -232,4 +231,25 @@ public class ElectionDAO implements ElectionInterface{
 
 	}
 
+	public void changeActive(int newId) throws PersistanceException {
+		Connection con = null;
+		PreparedStatement ps = null;
+
+		try {
+			String query = "UPDATE elections SET is_active = 1 WHERE id = ?";
+			con = ConnectionUtil.getConnection();
+			ps = con.prepareStatement(query);
+//	        ps.setBoolean(1, false);
+			ps.setInt(1, newId);
+
+			ps.executeUpdate();
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+			System.out.println(e.getMessage());
+			throw new PersistanceException(e);
+		} finally {
+			ConnectionUtil.close(con, ps);
+		}
+	}
 }

@@ -102,12 +102,11 @@ public class TalukDAO implements TalukInterface {
 		PreparedStatement ps = null;
 
 		try {
-			String query = "UPDATE taluks SET taluk_name = ? Where id = ?";
+			String query = "UPDATE taluks SET taluk_name = ? Where is_active = 1";
 			con = ConnectionUtil.getConnection();
 			ps = con.prepareStatement(query);
 			ps.setString(1, newTaluk.getTalukName());
-			ps.setInt(2, id);
-
+			
 			ps.executeUpdate();
 
 			System.out.println("Taluk Name Successfully Updated");
@@ -204,4 +203,30 @@ public class TalukDAO implements TalukInterface {
 
 	}
 
+	public void changeActive(int newId) throws PersistanceException {
+		Connection con = null;
+		PreparedStatement ps = null;
+
+		try {
+			String query = "UPDATE taluks SET is_active = 1 WHERE id = ?";
+			con = ConnectionUtil.getConnection();
+			ps = con.prepareStatement(query);
+//	        ps.setBoolean(1, false);
+			ps.setInt(1, newId);
+
+			int rowsAffected = ps.executeUpdate();
+			if (rowsAffected > 0) {
+				System.out.println("Taluk with ID " + newId + " set as inactive.");
+			} else {
+				System.out.println("Taluk with ID " + newId + " not found.");
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+			System.out.println(e.getMessage());
+			throw new PersistanceException(e);
+		} finally {
+			ConnectionUtil.close(con, ps);
+		}
+	}
 }

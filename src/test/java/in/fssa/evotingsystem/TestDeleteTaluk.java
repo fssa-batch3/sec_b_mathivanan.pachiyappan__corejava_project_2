@@ -6,19 +6,19 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
+import in.fssa.evotingsystem.dao.TalukDAO;
 import in.fssa.evotingsystem.exception.ValidationException;
 import in.fssa.evotingsystem.service.TalukService;
 
-public class TestDeleteTask {
+public class TestDeleteTaluk {
 
 	@Test
-	public void testDeleteTaluk() {
-
-		TalukService talukService = new TalukService();
-
+	void testDeleteTaluk() {
 		assertDoesNotThrow(() -> {
-
-			talukService.delete(2);
+			TalukService userService = new TalukService();
+			TalukDAO app = new TalukDAO();
+			app.changeActive(1);
+			userService.delete(1);
 		});
 	}
 	

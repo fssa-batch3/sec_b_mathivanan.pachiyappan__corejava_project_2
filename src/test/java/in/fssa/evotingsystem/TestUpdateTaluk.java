@@ -1,5 +1,6 @@
 package in.fssa.evotingsystem;
 
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -12,7 +13,7 @@ import in.fssa.evotingsystem.service.TalukService;
 public class TestUpdateTaluk {
 
 	@Test
-	public void testUpdateTalukServices() {
+	public void testUpdateTalukWithValidData() {
 
 		TalukService talukService = new TalukService();
 
@@ -20,15 +21,9 @@ public class TestUpdateTaluk {
 
 		newTaluk.setTalukName("U1");
 
-		Exception exception = assertThrows(ValidationException.class, () -> {
-
-			talukService.update(1001, newTaluk);
+		assertDoesNotThrow(() -> {
+			talukService.update(5, newTaluk);
 		});
-
-		String except = exception.getMessage();
-		String message = "Taluk not exsists";
-
-		assertTrue(except.equals(message));
 	}
 
 	@Test
