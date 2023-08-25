@@ -23,12 +23,12 @@ public class TestUpdateCandidate {
 
 		newCandidate.setCandidateId(37652);
 		newCandidate.setElectionId(2);
-		newCandidate.setCandidateName("Stalin");
+		newCandidate.setCandidateName("Modi");
 		newCandidate.setCreatedAt(LocalDate.of(2023, 12, 3));
 
 		
 		   assertDoesNotThrow(() -> {
-			   candidateService.update(12, newCandidate);
+			   candidateService.updateElection(2, newCandidate);
 	        });
 	}
 
@@ -37,7 +37,7 @@ public class TestUpdateCandidate {
 
 		CandidateService candidateService = new CandidateService();
 		Exception exception = assertThrows(ValidationException.class, () -> {
-			candidateService.delete(-2);
+			candidateService.deleteElection(-2);
 		});
 		String expectedMessage = "ID cannot be 0 or negative";
 		String actualMessage = exception.getMessage();
@@ -57,7 +57,7 @@ public class TestUpdateCandidate {
 			newCandidate.setCandidateName("");
 			newCandidate.setCreatedAt(LocalDate.of(2023, 12, 12));
 
-			candidateService.create(newCandidate);
+			candidateService.createCandidate(newCandidate);
 		});
 		String expectedMessage = "Candidate Name cannot be Null or Empty";
 		String actualMessage = exception.getMessage();
@@ -76,7 +76,7 @@ public class TestUpdateCandidate {
 			newCandidate.setCandidateName(null);
 			newCandidate.setCreatedAt(LocalDate.of(2023, 12, 12));
 
-			candidateService.create(newCandidate);
+			candidateService.createCandidate(newCandidate);
 		});
 		String expectedMessage = "Candidate Name cannot be Null or Empty";
 		String actualMessage = exception.getMessage();

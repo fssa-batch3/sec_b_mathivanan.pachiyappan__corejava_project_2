@@ -19,7 +19,7 @@ import in.fssa.evotingsystem.validator.ElectionValidator;
  */
 public class ElectionService {
 
-	private ElectionDAO electiondao = new ElectionDAO();
+	private ElectionDAO electionDAO = new ElectionDAO();
 
 	/**
 	 * Converts a string representation of a date to a LocalDate object.
@@ -70,10 +70,10 @@ public class ElectionService {
 	 * @throws ServiceException    If there was an issue creating the election.
 	 * @throws ValidationException If the provided election data is not valid.
 	 */
-	public void create(Election election) throws ServiceException, ValidationException {
+	public void createElection(Election election) throws ServiceException, ValidationException {
 		try {
 			ElectionValidator.validate(election);
-			electiondao.create(election);
+			electionDAO.create(election);
 		} catch (PersistanceException e) {
 			throw new ServiceException("Failed to Create Election");
 		}
@@ -87,12 +87,12 @@ public class ElectionService {
 	 * @throws ServiceException    If there was an issue updating the election.
 	 * @throws ValidationException If the provided election data is not valid.
 	 */
-	public void update(int newId, Election election) throws ServiceException, ValidationException {
+	public void updateElection(int newId, Election election) throws ServiceException, ValidationException {
 		try {
 			ElectionValidator.isIdExists(newId);
 			ElectionValidator.validate(election);
 
-			electiondao.update(newId, election);
+			electionDAO.update(newId, election);
 		} catch (PersistanceException e) {
 			throw new ServiceException("Failed to Update Election");
 		}
@@ -105,11 +105,11 @@ public class ElectionService {
 	 * @throws ServiceException    If there was an issue deleting the election.
 	 * @throws ValidationException If the provided election ID is not valid.
 	 */
-	public void delete(int id) throws ServiceException, ValidationException {
+	public void deleteElection(int id) throws ServiceException, ValidationException {
 		try {
 			ElectionValidator.isIdExists(id);
 			ElectionValidator.validateId(id);
-			electiondao.delete(id);
+			electionDAO.delete(id);
 		} catch (PersistanceException e) {
 			throw new ServiceException("Failed to Delete Election");
 		}
@@ -123,10 +123,10 @@ public class ElectionService {
 	 * @throws ServiceException    If there was an issue finding the election.
 	 * @throws ValidationException If the provided election ID is not valid.
 	 */
-	public Election findById(int newId) throws ServiceException, ValidationException {
+	public Election findByElectionId(int newId) throws ServiceException, ValidationException {
 		try {
 			ElectionValidator.validateId(newId);
-			return electiondao.findById(newId);
+			return electionDAO.findById(newId);
 		} catch (PersistanceException e) {
 			throw new ServiceException("Failed to Find Election");
 		}
@@ -138,9 +138,9 @@ public class ElectionService {
 	 * @return The list of all elections.
 	 * @throws ServiceException If there was an issue retrieving the elections.
 	 */
-	public List<Election> getAll() throws ServiceException {
+	public List<Election> getAllElection() throws ServiceException {
 		try {
-			return electiondao.findAll();
+			return electionDAO.findAll();
 		} catch (PersistanceException e) {
 			throw new ServiceException("Failed to List All Elections");
 		}

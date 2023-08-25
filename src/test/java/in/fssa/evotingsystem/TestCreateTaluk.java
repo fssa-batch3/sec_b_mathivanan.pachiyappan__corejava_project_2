@@ -21,7 +21,7 @@ public class TestCreateTaluk {
 		newTaluk.setTalukName("A1");
 
 		assertDoesNotThrow(() -> {
-			talukService.create(newTaluk);
+			talukService.createTaluk(newTaluk);
 		});
 	}
 	
@@ -29,7 +29,7 @@ public class TestCreateTaluk {
 	public void testCreateTalukWithInvalidData() {
 		TalukService talukService = new TalukService();
 		Exception exception = assertThrows(ValidationException.class, () -> {
-			talukService.create(null);
+			talukService.createTaluk(null);
 		});
 		String expectedMessage = "Invalid Taluk Input";
 		String actualMessage = exception.getMessage();
@@ -45,7 +45,7 @@ public class TestCreateTaluk {
 
 			newUser.setTalukName("");
 			
-			userService.create(newUser);
+			userService.createTaluk(newUser);
 		});
 		String expectedMessage = "Taluk Name cannot be Null or Empty";
 		String actualMessage = exception.getMessage();
@@ -61,7 +61,7 @@ public class TestCreateTaluk {
 
 			newTaluk.setTalukName(null);
 			
-			talukService.create(newTaluk);
+			talukService.createTaluk(newTaluk);
 		});
 		String expectedMessage = "Taluk Name cannot be Null or Empty";
 		String actualMessage = exception.getMessage();

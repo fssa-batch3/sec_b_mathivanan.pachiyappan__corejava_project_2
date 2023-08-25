@@ -15,7 +15,7 @@ public class TestGetAllElections {
 
 		assertDoesNotThrow(() -> {
 
-			Election findElection = electionService.findById(2);
+			Election findElection = electionService.findByElectionId(2);
 			 System.out.println(findElection);
 
 		});
@@ -26,7 +26,7 @@ public class TestGetAllElections {
 	public void getAllElections() {
 		assertDoesNotThrow(() -> {
 		ElectionService electionService = new ElectionService();
-		System.out.println(electionService.getAll());
+		System.out.println(electionService.getAllElection());
 		});
 	}
 }

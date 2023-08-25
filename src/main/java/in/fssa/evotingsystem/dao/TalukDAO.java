@@ -7,10 +7,9 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import in.fssa.evotingsystem.Interface.TalukInterface;
 import in.fssa.evotingsystem.exception.PersistanceException;
+import in.fssa.evotingsystem.interfaces.TalukInterface;
 import in.fssa.evotingsystem.model.Taluk;
-import in.fssa.evotingsystem.model.User;
 import in.fssa.evotingsystem.util.ConnectionUtil;
 
 /**
@@ -135,7 +134,7 @@ public class TalukDAO implements TalukInterface {
 		Taluk matchedTaluk = null;
 
 		try {
-			String query = "SELECT * FROM taluks WHERE id = ? AND is_active = 1";
+			String query = "SELECT taluk_name FROM taluks WHERE id = ? AND is_active = 1";
 			con = ConnectionUtil.getConnection();
 			ps = con.prepareStatement(query);
 			ps.setInt(1, talukId);
@@ -143,7 +142,6 @@ public class TalukDAO implements TalukInterface {
 
 			if (rs.next()) {
 				matchedTaluk = new Taluk();
-				matchedTaluk.setId(rs.getInt("id"));
 				matchedTaluk.setTalukName(rs.getString("taluk_name"));
 			}
 
@@ -174,14 +172,13 @@ public class TalukDAO implements TalukInterface {
 		List<Taluk> talukList = new ArrayList<Taluk>();
 
 		try {
-			String query = "SELECT * from taluks where is_active = 1";
+			String query = "SELECT taluk_name from taluks where is_active = 1";
 			con = ConnectionUtil.getConnection();
 			ps = con.prepareStatement(query);
 			rs = ps.executeQuery();
 
 			while (rs.next()) {
 				Taluk newTaluk = new Taluk();
-				newTaluk.setId(rs.getInt("id"));
 				newTaluk.setTalukName(rs.getString("taluk_name"));
 
 				talukList.add(newTaluk);

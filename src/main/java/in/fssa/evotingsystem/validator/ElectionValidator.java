@@ -45,10 +45,10 @@ public class ElectionValidator {
     public static void isIdExists(int id) throws ValidationException {
         validateId(id);
 
-        ElectionDAO electiondao = new ElectionDAO();
+        ElectionDAO electionDAO = new ElectionDAO();
         Election election;
 		try {
-			election = electiondao.findById(id);
+			election = electionDAO.findById(id);
 		} catch (PersistanceException e) {
 			throw new ValidationException(e.getMessage());
 		}

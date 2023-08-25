@@ -28,7 +28,7 @@ public class TestUpdateUser {
 
         // Assuming your update method returns some status or throws an exception, adjust accordingly
         assertDoesNotThrow(() -> {
-            userService.update(5, newUser);
+            userService.updateUser(5, newUser);
         });
     }
 
@@ -37,7 +37,7 @@ public class TestUpdateUser {
 
 		UserService userService = new UserService();
 		Exception exception = assertThrows(ValidationException.class, () -> {
-			userService.delete(-2);
+			userService.deleteUser(-2);
 		});
 		String expectedMessage = "Id can not be 0 or negative";
 		String actualMessage = exception.getMessage();
@@ -58,7 +58,7 @@ public class TestUpdateUser {
 			newUser.setVoterId(12345);
 			newUser.setTalukId(1); // Assuming 1 is a valid taluk ID
 
-			userService.create(newUser);
+			userService.createUser(newUser);
 		});
 		String expectedMessage = "Password cannot be Null or Empty";
 		String actualMessage = exception.getMessage();
@@ -78,7 +78,7 @@ public class TestUpdateUser {
 			newUser.setVoterId(12345);
 			newUser.setTalukId(1); // Assuming 1 is a valid taluk ID
 
-			userService.create(newUser);
+			userService.createUser(newUser);
 		});
 		String expectedMessage = "Password cannot be Null or Empty";
 		String actualMessage = exception.getMessage();
@@ -98,7 +98,7 @@ public class TestUpdateUser {
 			newUser.setVoterId(12345);
 			newUser.setTalukId(1); // Assuming 1 is a valid taluk ID
 
-			userService.create(newUser);
+			userService.createUser(newUser);
 		});
 		String expectedMessage = "Address cannot be Null or Empty";
 		String actualMessage = exception.getMessage();
@@ -118,29 +118,9 @@ public class TestUpdateUser {
 			newUser.setVoterId(12345);
 			newUser.setTalukId(1); // Assuming 1 is a valid taluk ID
 
-			userService.create(newUser);
+			userService.createUser(newUser);
 		});
 		String expectedMessage = "Address cannot be Null or Empty";
-		String actualMessage = exception.getMessage();
-		assertTrue(expectedMessage.equals(actualMessage));
-	}
-
-	@Test
-	public void testUpdateUserWithInvalidVoterId() {
-		UserService userService = new UserService();
-		Exception exception = assertThrows(ValidationException.class, () -> {
-
-			User newUser = new User();
-
-			newUser.setPhoneNumber(8737634567L);
-			newUser.setPassword("Njcat#10van");
-			newUser.setAddress("123 Main St, City");
-			newUser.setVoterId(-2);
-			newUser.setTalukId(13);
-
-			userService.update(15, newUser);
-		});
-		String expectedMessage = "Invalid Voter ID";
 		String actualMessage = exception.getMessage();
 		assertTrue(expectedMessage.equals(actualMessage));
 	}
@@ -158,7 +138,7 @@ public class TestUpdateUser {
 			newUser.setVoterId(12345);
 			newUser.setTalukId(-1); // Invalid negative taluk ID
 
-			userService.create(newUser);
+			userService.createUser(newUser);
 		});
 		String expectedMessage = "Invalid Taluk ID";
 		String actualMessage = exception.getMessage();

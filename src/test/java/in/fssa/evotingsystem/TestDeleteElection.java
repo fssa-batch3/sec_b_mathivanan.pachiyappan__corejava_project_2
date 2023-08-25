@@ -18,7 +18,7 @@ public class TestDeleteElection {
 			ElectionService electionService = new ElectionService();
 			ElectionDAO app = new ElectionDAO();
 			app.changeActive(1);
-			electionService.delete(1);
+			electionService.deleteElection(1);
 		});
 	}
 
@@ -27,7 +27,7 @@ public class TestDeleteElection {
 
 		ElectionService electionService = new ElectionService();
 		Exception exception = assertThrows(ValidationException.class, () -> {
-			electionService.delete(-2);
+			electionService.deleteElection(-2);
 		});
 		String expectedMessage = "ID can not be 0 or negative";
 		String actualMessage = exception.getMessage();

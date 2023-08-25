@@ -1,4 +1,4 @@
-package in.fssa.evotingsystem.Interface;
+package in.fssa.evotingsystem.interfaces;
 
 import in.fssa.evotingsystem.exception.PersistanceException;
 import in.fssa.evotingsystem.model.User;

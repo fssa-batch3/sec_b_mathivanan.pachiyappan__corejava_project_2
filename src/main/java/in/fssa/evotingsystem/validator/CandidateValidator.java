@@ -52,10 +52,10 @@ public class CandidateValidator {
 	public static void isIdExists(int id) throws ValidationException {
 		validateId(id);
 
-		CandidateDAO cd = new CandidateDAO();
+		CandidateDAO candidateDAO = new CandidateDAO();
 		Candidate candidate;
 		try {
-			candidate = cd.findById(id);
+			candidate = candidateDAO.findById(id);
 		} catch (PersistanceException e) {
 			throw new ValidationException(e.getMessage());
 		}

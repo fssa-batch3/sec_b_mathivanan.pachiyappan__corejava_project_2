@@ -20,7 +20,7 @@ import in.fssa.evotingsystem.validator.ElectionValidator;
  */
 public class CandidateService {
 
-	private CandidateDAO candidatedao = new CandidateDAO();
+	private CandidateDAO candidateDAO = new CandidateDAO();
 
 	/**
 	 * Converts a string representation of a date to a LocalDate object.
@@ -71,10 +71,10 @@ public class CandidateService {
 	 * @throws ServiceException    If there was an issue creating the candidate.
 	 * @throws ValidationException If the provided candidate data is not valid.
 	 */
-	public void create(Candidate candidate) throws ServiceException, ValidationException {
+	public void createCandidate(Candidate candidate) throws ServiceException, ValidationException {
 		try {
 			CandidateValidator.validate(candidate);
-			candidatedao.create(candidate);
+			candidateDAO.create(candidate);
 		} catch (PersistanceException e) {
 			e.printStackTrace();
 			throw new ServiceException("Failed to Create Candidate");
@@ -89,11 +89,11 @@ public class CandidateService {
 	 * @throws ServiceException    If there was an issue updating the candidate.
 	 * @throws ValidationException If the provided candidate data is not valid.
 	 */
-	public void update(int newId, Candidate candidate) throws ServiceException, ValidationException {
+	public void updateElection(int newId, Candidate candidate) throws ServiceException, ValidationException {
 		try {
 			CandidateValidator.isIdExists(newId);
 			CandidateValidator.validate(candidate);
-			candidatedao.update(newId, candidate);
+			candidateDAO.update(newId, candidate);
 		} catch (PersistanceException e) {
 			throw new ServiceException("Failed to Update Candidate");
 		}
@@ -106,12 +106,12 @@ public class CandidateService {
 	 * @throws ServiceException    If there was an issue deleting the candidate.
 	 * @throws ValidationException If the provided candidate ID is not valid.
 	 */
-	public void delete(int id) throws ServiceException, ValidationException {
+	public void deleteElection(int id) throws ServiceException, ValidationException {
 		try {
 			CandidateValidator.isIdExists(id);
 			CandidateValidator.validateId(id);
 
-			candidatedao.delete(id);
+			candidateDAO.delete(id);
 		} catch (PersistanceException e) {
 			throw new ServiceException("Failed to Delete Candidate");
 		}
@@ -125,10 +125,10 @@ public class CandidateService {
 	 * @throws ServiceException    If there was an issue finding the candidate.
 	 * @throws ValidationException If the provided candidate ID is not valid.
 	 */
-	public Candidate findById(int newId) throws ServiceException, ValidationException {
+	public Candidate findByElectionId(int newId) throws ServiceException, ValidationException {
 		try {
 			ElectionValidator.validateId(newId);
-			return candidatedao.findById(newId);
+			return candidateDAO.findById(newId);
 		} catch (PersistanceException e) {
 			throw new ServiceException("Failed to Find Candidate");
 		}
@@ -140,9 +140,9 @@ public class CandidateService {
 	 * @return The list of all candidates.
 	 * @throws ServiceException If there was an issue retrieving the candidates.
 	 */
-	public List<Candidate> getAll() throws ServiceException {
+	public List<Candidate> getAllElection() throws ServiceException {
 		try {
-			return candidatedao.findAll();
+			return candidateDAO.findAll();
 		} catch (PersistanceException e) {
 			throw new ServiceException("Failed to List All Candidates");
 		}

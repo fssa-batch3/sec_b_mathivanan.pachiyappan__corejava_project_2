@@ -68,11 +68,11 @@ public class UserValidator {
 
 		validateId(id);
 
-		UserDAO userdao = new UserDAO();
+		UserDAO userDAO = new UserDAO();
 		User user = new User();
 
 		try {
-			user = userdao.findById(id);
+			user = userDAO.findById(id);
 		} catch (PersistanceException e) {
 			throw new ValidationException(e.getMessage());
 		}
@@ -107,9 +107,9 @@ public class UserValidator {
 	 */
 	public static void isPhoneNumberExists(long phoneNumber) throws ValidationException {
 
-		UserDAO userdao = new UserDAO();
+		UserDAO userDAO = new UserDAO();
 		try {
-			User existingUser = userdao.findByPhoneNumber(phoneNumber);
+			User existingUser = userDAO.findByPhoneNumber(phoneNumber);
 			if (existingUser != null) {
 				throw new ValidationException("Phone number already exists");
 			}

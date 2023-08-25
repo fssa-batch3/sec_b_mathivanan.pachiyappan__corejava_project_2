@@ -22,7 +22,7 @@ public class TestUpdateTaluk {
 		newTaluk.setTalukName("U1");
 
 		assertDoesNotThrow(() -> {
-			talukService.update(5, newTaluk);
+			talukService.updateTaluk(5, newTaluk);
 		});
 	}
 
@@ -31,7 +31,7 @@ public class TestUpdateTaluk {
 
 		TalukService talukService = new TalukService();
 		Exception exception = assertThrows(ValidationException.class, () -> {
-			talukService.delete(-2);
+			talukService.deleteTaluk(-2);
 		});
 		String expectedMessage = "Id can not be 0 or negative";
 		String actualMessage = exception.getMessage();

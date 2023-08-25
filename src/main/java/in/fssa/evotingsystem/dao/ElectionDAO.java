@@ -8,8 +8,8 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-import in.fssa.evotingsystem.Interface.ElectionInterface;
 import in.fssa.evotingsystem.exception.PersistanceException;
+import in.fssa.evotingsystem.interfaces.ElectionInterface;
 import in.fssa.evotingsystem.model.Election;
 import in.fssa.evotingsystem.service.ElectionService;
 import in.fssa.evotingsystem.util.ConnectionUtil;
@@ -152,7 +152,7 @@ public class ElectionDAO implements ElectionInterface{
 		Election matchedElection = null;
 
 		try {
-			String query = "SELECT * FROM elections WHERE is_active = 1 AND id = ?";
+			String query = "SELECT booth_address, election_name, election_date, taluk_id FROM elections WHERE is_active = 1 AND id = ?";
 			con = ConnectionUtil.getConnection();
 			ps = con.prepareStatement(query);
 			ps.setInt(1, Id);
@@ -160,13 +160,11 @@ public class ElectionDAO implements ElectionInterface{
 
 			if (rs.next()) {
 				matchedElection = new Election();
-				matchedElection.setId(rs.getInt("id"));
 				matchedElection.setBoothAddress(rs.getString("booth_address"));
 				matchedElection.setElectionName(rs.getString("election_name"));
 				LocalDate date = ElectionService.convertSqlDateToLocalDate(rs.getDate("election_date"));
 				matchedElection.setElectionDate(date);
 				matchedElection.setTalukId(rs.getInt("taluk_id"));
-				matchedElection.setActive(rs.getBoolean("is_active"));
 
 			}
 
@@ -197,20 +195,18 @@ public class ElectionDAO implements ElectionInterface{
 		List<Election> ElectionList = new ArrayList<Election>();
 
 		try {
-			String query = "SELECT * from elections where is_active = 1";
+			String query = "SELECT booth_address, election_name, election_date, taluk_id from elections where is_active = 1";
 			con = ConnectionUtil.getConnection();
 			ps = con.prepareStatement(query);
 			rs = ps.executeQuery();
 
 			while (rs.next()) {
 				Election newElection = new Election();
-				newElection.setId(rs.getInt("id"));
 				newElection.setBoothAddress(rs.getString("booth_address"));
 				newElection.setElectionName(rs.getString("election_name"));
 				LocalDate date = ElectionService.convertSqlDateToLocalDate(rs.getDate("election_date"));
 				newElection.setElectionDate(date);
 				newElection.setTalukId(rs.getInt("taluk_id"));
-				newElection.setActive(rs.getBoolean("is_active"));
 
 				ElectionList.add(newElection);
 			}

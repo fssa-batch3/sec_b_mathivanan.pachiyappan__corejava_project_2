@@ -15,7 +15,7 @@ public class TestGetAllTaluk {
 
 		assertDoesNotThrow(() -> {
 
-			Taluk findTaluk = talukService.findById(1);
+			Taluk findTaluk = talukService.findByTalukId(1);
 			System.out.println(findTaluk);
 
 		});
@@ -26,7 +26,7 @@ public class TestGetAllTaluk {
 	public void getAllUsers() {
 		assertDoesNotThrow(() -> {
 			TalukService talukService = new TalukService();
-			System.out.println(talukService.getAll());
+			System.out.println(talukService.getAllTaluk());
 
 		});
 

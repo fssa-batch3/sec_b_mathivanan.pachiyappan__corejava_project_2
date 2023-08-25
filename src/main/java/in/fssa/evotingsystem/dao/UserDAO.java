@@ -7,8 +7,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import in.fssa.evotingsystem.Interface.UserInterface;
 import in.fssa.evotingsystem.exception.PersistanceException;
+import in.fssa.evotingsystem.interfaces.UserInterface;
 import in.fssa.evotingsystem.model.User;
 import in.fssa.evotingsystem.util.ConnectionUtil;
 
@@ -143,7 +143,7 @@ public class UserDAO implements UserInterface {
 		User user = null;
 
 		try {
-			String query = "SELECT * FROM users  WHERE is_active = 1 and phone_number = ? ";
+			String query = "SELECT phone_number, address, voter_id, taluk_id FROM users  WHERE is_active = 1 and phone_number = ? ";
 			con = ConnectionUtil.getConnection();
 			ps = con.prepareStatement(query);
 			ps.setLong(1, userPhoneNo);
@@ -151,13 +151,10 @@ public class UserDAO implements UserInterface {
 
 			if (rs.next()) {
 				user = new User();
-				user.setId(rs.getInt("id"));
 				user.setPhoneNumber(rs.getLong("phone_number"));
 				user.setAddress(rs.getString("address"));
 				user.setVoterId(rs.getInt("voter_id"));
 				user.setTalukId(rs.getInt("taluk_id"));
-				user.setActive(rs.getBoolean("is_active"));
-				user.setPassword(rs.getString("password"));
 			}
 
 		} catch (SQLException e) {
@@ -179,41 +176,38 @@ public class UserDAO implements UserInterface {
 	 * @throws PersistanceException If there's an issue with the database operation.
 	 */
 	public User findById(int userId) throws PersistanceException {
-		Connection con = null;
-		PreparedStatement ps = null;
-		ResultSet rs = null;
-		User matchedUser = null;
+	    Connection con = null;
+	    PreparedStatement ps = null;
+	    ResultSet rs = null;
+	    User matchedUser = null;
 
-		try {
-			String query = "SELECT * FROM users WHERE id = ? AND is_active = 1";
-			con = ConnectionUtil.getConnection();
-			ps = con.prepareStatement(query);
-			ps.setInt(1, userId);
-			rs = ps.executeQuery();
+	    try {
+	        String query = "SELECT phone_number, address, voter_id, taluk_id FROM users WHERE id = ? AND is_active = 1";
+	        con = ConnectionUtil.getConnection();
+	        ps = con.prepareStatement(query);
+	        ps.setInt(1, userId);
+	        rs = ps.executeQuery();
 
-			if (rs.next()) {
-				matchedUser = new User();
-				matchedUser.setId(rs.getInt("id"));
-				matchedUser.setPhoneNumber(rs.getLong("phone_number"));
-				matchedUser.setAddress(rs.getString("address"));
-				matchedUser.setVoterId(rs.getInt("voter_id"));
-				matchedUser.setTalukId(rs.getInt("taluk_id"));
-				matchedUser.setActive(rs.getBoolean("is_active"));
-				matchedUser.setPassword(rs.getString("password"));
+	        if (rs.next()) {
+	            matchedUser = new User();
+	            matchedUser.setPhoneNumber(rs.getLong("phone_number"));
+	            matchedUser.setAddress(rs.getString("address"));
+	            matchedUser.setVoterId(rs.getInt("voter_id"));
+	            matchedUser.setTalukId(rs.getInt("taluk_id"));
+	        }
 
-			}
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	        System.out.println(e.getMessage());
+	        throw new PersistanceException(e);
+	    } finally {
+	        ConnectionUtil.close(con, ps, rs);
+	    }
 
-		} catch (SQLException e) {
-			e.printStackTrace();
-			System.out.println(e.getMessage());
-			throw new PersistanceException(e);
-		} finally {
-			ConnectionUtil.close(con, ps, rs);
-		}
-
-		System.out.println(matchedUser);
-		return matchedUser;
+	    System.out.println(matchedUser);
+	    return matchedUser;
 	}
+
 
 	/**
 	 * Retrieves a list of active User entities from the database.
@@ -230,20 +224,17 @@ public class UserDAO implements UserInterface {
 		List<User> userList = new ArrayList<User>();
 
 		try {
-			String query = "SELECT * from users where is_active = 1";
+			String query = "SELECT phone_number, address, voter_id, taluk_id from users where is_active = 1";
 			con = ConnectionUtil.getConnection();
 			ps = con.prepareStatement(query);
 			rs = ps.executeQuery();
 
 			while (rs.next()) {
 				User newUser = new User();
-				newUser.setId(rs.getInt("id"));
 				newUser.setPhoneNumber(rs.getLong("phone_number"));
 				newUser.setAddress(rs.getString("address"));
 				newUser.setVoterId(rs.getInt("voter_id"));
 				newUser.setTalukId(rs.getInt("taluk_id"));
-				newUser.setActive(rs.getBoolean("is_active"));
-				newUser.setPassword(rs.getString("password"));
 
 				userList.add(newUser);
 			}

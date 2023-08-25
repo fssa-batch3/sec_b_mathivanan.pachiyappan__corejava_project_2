@@ -8,8 +8,8 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-import in.fssa.evotingsystem.Interface.CandidateInterface;
 import in.fssa.evotingsystem.exception.PersistanceException;
+import in.fssa.evotingsystem.interfaces.CandidateInterface;
 import in.fssa.evotingsystem.model.Candidate;
 import in.fssa.evotingsystem.service.CandidateService;
 import in.fssa.evotingsystem.util.ConnectionUtil;
@@ -145,7 +145,7 @@ public class CandidateDAO implements CandidateInterface {
 		Candidate candidate = null;
 
 		try {
-			String query = "SELECT * FROM candidates  WHERE is_active = 1 and candidate_eno = ? ";
+			String query = "SELECT candidate_eno, election_id, name, created_at  FROM candidates  WHERE is_active = 1 and candidate_eno = ? ";
 			con = ConnectionUtil.getConnection();
 			ps = con.prepareStatement(query);
 			ps.setInt(1, candidateId);
@@ -153,13 +153,11 @@ public class CandidateDAO implements CandidateInterface {
 
 			if (rs.next()) {
 				candidate = new Candidate();
-				candidate.setId(rs.getInt("id"));
 				candidate.setCandidateId(rs.getInt("candidate_eno"));
 				candidate.setElectionId(rs.getInt("election_id"));
 				candidate.setCandidateName(rs.getString("name"));
 				LocalDate date = CandidateService.convertSqlDateToLocalDate(rs.getDate("created_at"));
 				candidate.setCreatedAt(date);
-				candidate.setActive(rs.getBoolean("is_active"));
 			}
 
 		} catch (SQLException e) {
@@ -188,7 +186,7 @@ public class CandidateDAO implements CandidateInterface {
 		Candidate matchedCandidate = null;
 
 		try {
-			String query = "SELECT * FROM candidates WHERE id = ? AND is_active = 1";
+			String query = "SELECT candidate_eno, election_id, name, created_at FROM candidates WHERE id = ? AND is_active = 1";
 			con = ConnectionUtil.getConnection();
 			ps = con.prepareStatement(query);
 			ps.setInt(1, Id);
@@ -196,14 +194,11 @@ public class CandidateDAO implements CandidateInterface {
 
 			if (rs.next()) {
 				matchedCandidate = new Candidate();
-				matchedCandidate.setId(rs.getInt("id"));
 				matchedCandidate.setCandidateId(rs.getInt("candidate_eno"));
 				matchedCandidate.setElectionId(rs.getInt("election_id"));
 				matchedCandidate.setCandidateName(rs.getString("name"));
 				LocalDate date = CandidateService.convertSqlDateToLocalDate(rs.getDate("created_at"));
 				matchedCandidate.setCreatedAt(date);
-				matchedCandidate.setActive(rs.getBoolean("is_active"));
-
 			}
 
 		} catch (SQLException e) {
@@ -233,20 +228,18 @@ public class CandidateDAO implements CandidateInterface {
 		List<Candidate> CandidateList = new ArrayList<Candidate>();
 
 		try {
-			String query = "SELECT * from candidates where is_active = 1";
+			String query = "SELECT candidate_eno, election_id, name, created_at from candidates where is_active = 1";
 			con = ConnectionUtil.getConnection();
 			ps = con.prepareStatement(query);
 			rs = ps.executeQuery();
 
 			while (rs.next()) {
 				Candidate candidates = new Candidate();
-				candidates.setId(rs.getInt("id"));
 				candidates.setCandidateId(rs.getInt("candidate_eno"));
 				candidates.setElectionId(rs.getInt("election_id"));
 				candidates.setCandidateName(rs.getString("name"));
 				LocalDate date = CandidateService.convertSqlDateToLocalDate(rs.getDate("created_at"));
 				candidates.setCreatedAt(date);
-				candidates.setActive(rs.getBoolean("is_active"));
 
 				CandidateList.add(candidates);
 			}
@@ -266,7 +259,7 @@ public class CandidateDAO implements CandidateInterface {
 		return CandidateList;
 
 	}
-	
+
 	public void changeActive(int newId) throws PersistanceException {
 		Connection con = null;
 		PreparedStatement ps = null;

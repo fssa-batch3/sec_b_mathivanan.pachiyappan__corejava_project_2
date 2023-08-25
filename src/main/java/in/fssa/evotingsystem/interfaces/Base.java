@@ -1,4 +1,4 @@
-package in.fssa.evotingsystem.Interface;
+package in.fssa.evotingsystem.interfaces;
 
 import java.util.List;
 

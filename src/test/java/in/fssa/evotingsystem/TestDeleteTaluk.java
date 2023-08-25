@@ -18,7 +18,7 @@ public class TestDeleteTaluk {
 			TalukService userService = new TalukService();
 			TalukDAO app = new TalukDAO();
 			app.changeActive(1);
-			userService.delete(1);
+			userService.deleteTaluk(1);
 		});
 	}
 	
@@ -27,7 +27,7 @@ public class TestDeleteTaluk {
 
 		TalukService talukService = new TalukService();
 		Exception exception = assertThrows(ValidationException.class, () -> {
-			talukService.delete(-2);
+			talukService.deleteTaluk(-2);
 		});
 		String expectedMessage = "Id can not be 0 or negative";
 		String actualMessage = exception.getMessage();

@@ -16,7 +16,7 @@ import in.fssa.evotingsystem.validator.UserValidator;
 
 public class UserService {
 
-	private UserDAO userdao = new UserDAO();
+	private UserDAO userDAO = new UserDAO();
 
 	/**
      * Creates a new user.
@@ -25,10 +25,10 @@ public class UserService {
      * @throws ServiceException If there was an issue creating the user.
      * @throws ValidationException If the provided user data is not valid.
      */
-	public void create(User user) throws ServiceException, ValidationException {
+	public void createUser(User user) throws ServiceException, ValidationException {
 		try {
 			UserValidator.validate(user);
-			userdao.create(user);
+			userDAO.create(user);
 		} catch (PersistanceException e) {
 			throw new ServiceException("Failed to Create User");
 		}
@@ -43,13 +43,13 @@ public class UserService {
      * @throws ServiceException If there was an issue updating the user.
      * @throws ValidationException If the provided user data is not valid.
      */
-	public void update(int newId, User newUser) throws ServiceException, ValidationException {
+	public void updateUser(int newId, User newUser) throws ServiceException, ValidationException {
 
 		try {
 			UserValidator.isIdExists(newId);
 			UserValidator.validate(newUser);
 		
-			userdao.update(newId, newUser);
+			userDAO.update(newId, newUser);
 		} catch (PersistanceException e) {
 			throw new ServiceException("Failed to Update User");
 		}
@@ -63,12 +63,12 @@ public class UserService {
      * @throws ServiceException If there was an issue deleting the user.
      * @throws ValidationException If the provided user ID is not valid.
      */
-	public void delete(int id) throws ServiceException, ValidationException {
+	public void deleteUser(int id) throws ServiceException, ValidationException {
 
 		try {
 			UserValidator.validateId(id);
 			UserValidator.isIdExists(id);
-			userdao.delete(id);
+			userDAO.delete(id);
 		} catch (PersistanceException e) {
 			throw new ServiceException("Failed to Delete User");
 		}
@@ -82,12 +82,22 @@ public class UserService {
      * @throws ServiceException If there was an issue finding the user.
      * @throws ValidationException If the provided user ID is not valid.
      */
-	public User findById(int id) throws ServiceException, ValidationException {
+	public User findByUserId(int id) throws ServiceException, ValidationException {
 		try {
 			UserValidator.validateId(id);
-			return userdao.findById(id);
+			UserValidator.isIdExists(id);
+			return userDAO.findById(id);
 		} catch (PersistanceException e) {
-			throw new ServiceException("Failed to Find User");
+			throw new ServiceException("Failed to Find User by Id");
+		}
+	}
+	
+	public User findByPhoneNumber(long number) throws ServiceException, ValidationException {
+		try {
+			UserValidator.isPhoneNumberExists(number);
+			return userDAO.findByPhoneNumber(number);
+		} catch (PersistanceException e) {
+			throw new ServiceException("Failed to Find User using Phone Number");
 		}
 	}
 
@@ -97,9 +107,9 @@ public class UserService {
      * @return The list of all users.
      * @throws ServiceException If there was an issue retrieving the users.
      */
-	public List<User> getAll() throws ServiceException {
+	public List<User> getAllUser() throws ServiceException {
 		try {
-			return userdao.findAll();
+			return userDAO.findAll();
 		} catch (PersistanceException e) {
 			throw new ServiceException("Failed to List All Users");
 		}

@@ -44,11 +44,11 @@ public class TalukValidator {
 
 		validateId(id);
 
-		TalukDAO talukdao = new TalukDAO();
+		TalukDAO talukDAO = new TalukDAO();
 		Taluk taluk = new Taluk();
 
 		try {
-		      taluk = talukdao.findById(id);
+		      taluk = talukDAO.findById(id);
 		} catch (PersistanceException e) {
 			throw new ValidationException(e.getMessage());
 		}

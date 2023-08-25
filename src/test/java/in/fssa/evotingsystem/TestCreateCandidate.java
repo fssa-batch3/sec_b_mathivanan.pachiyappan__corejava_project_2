@@ -37,7 +37,7 @@ public class TestCreateCandidate {
 		newCandidate.setCreatedAt(LocalDate.of(2023, 12, 3));
 
 		assertDoesNotThrow(() -> {
-			candidateService.create(newCandidate);
+			candidateService.createCandidate(newCandidate);
 		});
 	}
 
@@ -45,7 +45,7 @@ public class TestCreateCandidate {
 	public void testCreateCandidateWithInvalidData() {
 		CandidateService candidateService = new CandidateService();
 		Exception exception = assertThrows(ValidationException.class, () -> {
-			candidateService.create(null);
+			candidateService.createCandidate(null);
 		});
 		String expectedMessage = "Invalid Candidate Input";
 		String actualMessage = exception.getMessage();
@@ -64,7 +64,7 @@ public class TestCreateCandidate {
 			newCandidate.setCandidateName("");
 			newCandidate.setCreatedAt(LocalDate.of(2023, 12, 12));
 
-			candidateService.create(newCandidate);
+			candidateService.createCandidate(newCandidate);
 		});
 		String expectedMessage = "Candidate Name cannot be Null or Empty";
 		String actualMessage = exception.getMessage();
@@ -83,7 +83,7 @@ public class TestCreateCandidate {
 			newCandidate.setCandidateName(null);
 			newCandidate.setCreatedAt(LocalDate.of(2023, 12, 12));
 
-			candidateService.create(newCandidate);
+			candidateService.createCandidate(newCandidate);
 		});
 		String expectedMessage = "Candidate Name cannot be Null or Empty";
 		String actualMessage = exception.getMessage();
@@ -102,7 +102,7 @@ public class TestCreateCandidate {
 			newCandidate.setCandidateName("Modi");
 			newCandidate.setCreatedAt(LocalDate.of(2023, 12, 12));
 
-			candidateService.create(newCandidate);
+			candidateService.createCandidate(newCandidate);
 		});
 		String expectedMessage = "Candidate ID cannot be 0 or negative";
 		String actualMessage = exception.getMessage();
@@ -121,7 +121,7 @@ public class TestCreateCandidate {
 			newCandidate.setCandidateName("Modi");
 			newCandidate.setCreatedAt(LocalDate.of(2023, 12, 12));
 			
-			candidateService.create(newCandidate);
+			candidateService.createCandidate(newCandidate);
 		});
 		String expectedMessage = "Invalid Election ID";
 		String actualMessage = exception.getMessage();

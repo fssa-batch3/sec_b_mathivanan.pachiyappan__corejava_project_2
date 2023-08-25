@@ -26,7 +26,7 @@ public class TestCreateElection {
 		newElection.setTalukId(1);
 
 		assertDoesNotThrow(() -> {
-			electionService.create(newElection);
+			electionService.createElection(newElection);
 		});
 	}
 
@@ -34,7 +34,7 @@ public class TestCreateElection {
 	public void testCreateElectionWithInvalidData() {
 		ElectionService electionService = new ElectionService();
 		Exception exception = assertThrows(ValidationException.class, () -> {
-			electionService.create(null);
+			electionService.createElection(null);
 		});
 		String expectedMessage = "Invalid Election Input";
 		String actualMessage = exception.getMessage();
@@ -53,7 +53,7 @@ public class TestCreateElection {
 			newElection.setElectionDate(LocalDate.of(2023, 3, 12));
 			newElection.setTalukId(1);
 
-			electionService.create(newElection);
+			electionService.createElection(newElection);
 		});
 		String expectedMessage = "Booth Address cannot be Null or Empty";
 		String actualMessage = exception.getMessage();
@@ -72,7 +72,7 @@ public class TestCreateElection {
 			newElection.setElectionDate(LocalDate.of(2023, 3, 12));
 			newElection.setTalukId(1);
 
-			electionService.create(newElection);
+			electionService.createElection(newElection);
 		});
 		String expectedMessage = "Booth Address cannot be Null or Empty";
 		String actualMessage = exception.getMessage();
@@ -91,7 +91,7 @@ public class TestCreateElection {
 			newElection.setElectionDate(LocalDate.of(2023, 3, 12));
 			newElection.setTalukId(1);
 
-			electionService.create(newElection);
+			electionService.createElection(newElection);
 
 		});
 		String expectedMessage = "Election Name cannot be Null or Empty";
@@ -111,7 +111,7 @@ public class TestCreateElection {
 			newElection.setElectionDate(LocalDate.of(2023, 3, 12));
 			newElection.setTalukId(1);
 
-			electionService.create(newElection);
+			electionService.createElection(newElection);
 
 		});
 		String expectedMessage = "Election Name cannot be Null or Empty";
@@ -131,7 +131,7 @@ public class TestCreateElection {
 			newElection.setElectionDate(LocalDate.of(2023, 3, 12));
 			newElection.setTalukId(1);
 
-			electionService.create(newElection);
+			electionService.createElection(newElection);
 
 		});
 		String expectedMessage = "Invalid Election Date";
@@ -151,7 +151,7 @@ public class TestCreateElection {
 			newElection.setElectionDate(LocalDate.of(2023, 3, 12));
 			newElection.setTalukId(-1);
 
-			electionService.create(newElection);
+			electionService.createElection(newElection);
 
 		});
 		String expectedMessage = "Invalid Taluk ID";

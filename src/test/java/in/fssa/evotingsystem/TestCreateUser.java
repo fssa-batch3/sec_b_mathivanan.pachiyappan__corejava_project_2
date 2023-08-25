@@ -38,7 +38,7 @@ public class TestCreateUser {
 		newUser.setTalukId(1); // Assuming 1 is a valid taluk ID
 
 		assertDoesNotThrow(() -> {
-			userService.create(newUser);
+			userService.createUser(newUser);
 		});
 	}
 
@@ -46,7 +46,7 @@ public class TestCreateUser {
 	public void testCreateUserWithInvalidData() {
 		UserService userService = new UserService();
 		Exception exception = assertThrows(ValidationException.class, () -> {
-			userService.create(null);
+			userService.createUser(null);
 		});
 		String expectedMessage = "Invalid User Input";
 		String actualMessage = exception.getMessage();
@@ -66,7 +66,7 @@ public class TestCreateUser {
 			newUser.setVoterId(12345);
 			newUser.setTalukId(1); // Assuming 1 is a valid taluk ID
 
-			userService.create(newUser);
+			userService.createUser(newUser);
 		});
 		String expectedMessage = "Invalid Phone Number";
 		String actualMessage = exception.getMessage();
@@ -86,7 +86,7 @@ public class TestCreateUser {
 			newUser.setVoterId(12345);
 			newUser.setTalukId(1); // Assuming 1 is a valid taluk ID
 
-			userService.create(newUser);
+			userService.createUser(newUser);
 		});
 		String expectedMessage = "Password cannot be Null or Empty";
 		String actualMessage = exception.getMessage();
@@ -106,7 +106,7 @@ public class TestCreateUser {
 			newUser.setVoterId(12345);
 			newUser.setTalukId(1); // Assuming 1 is a valid taluk ID
 
-			userService.create(newUser);
+			userService.createUser(newUser);
 		});
 		String expectedMessage = "Password cannot be Null or Empty";
 		String actualMessage = exception.getMessage();
@@ -126,7 +126,7 @@ public class TestCreateUser {
 			newUser.setVoterId(12345);
 			newUser.setTalukId(1); // Assuming 1 is a valid taluk ID
 
-			userService.create(newUser);
+			userService.createUser(newUser);
 		});
 		String expectedMessage = "Address cannot be Null or Empty";
 		String actualMessage = exception.getMessage();
@@ -146,7 +146,7 @@ public class TestCreateUser {
 			newUser.setVoterId(12345);
 			newUser.setTalukId(1); // Assuming 1 is a valid taluk ID
 
-			userService.create(newUser);
+			userService.createUser(newUser);
 		});
 		String expectedMessage = "Address cannot be Null or Empty";
 		String actualMessage = exception.getMessage();
@@ -166,7 +166,7 @@ public class TestCreateUser {
 			newUser.setVoterId(-2);
 			newUser.setTalukId(1);
 
-			userService.create(newUser);
+			userService.createUser(newUser);
 		});
 		String expectedMessage = "Invalid Voter ID";
 		String actualMessage = exception.getMessage();
@@ -186,7 +186,7 @@ public class TestCreateUser {
 			newUser.setVoterId(12345);
 			newUser.setTalukId(-1); // Invalid negative taluk ID
 
-			userService.create(newUser);
+			userService.createUser(newUser);
 		});
 		String expectedMessage = "Invalid Taluk ID";
 		String actualMessage = exception.getMessage();
@@ -206,7 +206,7 @@ public class TestCreateUser {
 			newUser.setVoterId(12345);
 			newUser.setTalukId(1); // Assuming 1 is a valid taluk ID
 
-			userService.create(newUser);
+			userService.createUser(newUser);
 		});
 		String expectedMessage = "Phone number already exists";
 		String actualMessage = exception.getMessage();

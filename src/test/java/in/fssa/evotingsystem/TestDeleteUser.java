@@ -18,7 +18,7 @@ public class TestDeleteUser {
 			UserService userService = new UserService();
 			UserDAO app = new UserDAO();
 			app.changeActive(1);
-			userService.delete(1);
+			userService.deleteUser(1);
 		});
 	}
 
@@ -27,7 +27,7 @@ public class TestDeleteUser {
 
 		UserService userService = new UserService();
 		Exception exception = assertThrows(ValidationException.class, () -> {
-			userService.delete(-2);
+			userService.deleteUser(-2);
 		});
 		String expectedMessage = "Id can not be 0 or negative";
 		String actualMessage = exception.getMessage();
