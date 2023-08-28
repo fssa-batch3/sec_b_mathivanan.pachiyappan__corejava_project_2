@@ -13,7 +13,7 @@ import in.fssa.evotingsystem.util.StringUtil;
  */
 public class UserValidator {
 
-	private static final String PASSWORD_PATTERN = "^(?=.*[0-9])(?=.*[a-zA-Z])(?=.*[@#$%^&+=])(?=\\S+$).{8,}$";
+	private static final String PASSWORD_PATTERN = "^(?=.*[0-9])(?=.*[a-zA-Z])(?=.*[@#$%^&+=])(?=\\S+$).{8,10}$";
 
 	/**
 	 * Validates the attributes of a User entity.
@@ -36,7 +36,7 @@ public class UserValidator {
 		}
 
 		if (!isValidPassword(newUser.getPassword())) {
-			throw new ValidationException("Password Pattern Mismatch");
+			throw new ValidationException("Password must be at least 8 characters ex: Njcat#10");
 		}
 
 		if (newUser.getPhoneNumber() <= 600000001L || newUser.getPhoneNumber() >= 9999999999L) {

@@ -32,7 +32,7 @@ public class TestCreateUser {
 		User newUser = new User();
 
 		newUser.setPhoneNumber(randNum);
-		newUser.setPassword("Njcat#10van");
+		newUser.setPassword("Njcat#10");
 		newUser.setAddress("112 Main St, City");
 		newUser.setVoterId(6782);
 		newUser.setTalukId(1); // Assuming 1 is a valid taluk ID
@@ -61,7 +61,7 @@ public class TestCreateUser {
 			User newUser = new User();
 
 			newUser.setPhoneNumber(-9876543210L); // Negative phone number
-			newUser.setPassword("Njcat#10van");
+			newUser.setPassword("Njcat#10");
 			newUser.setAddress("123 Main St, City");
 			newUser.setVoterId(12345);
 			newUser.setTalukId(1); // Assuming 1 is a valid taluk ID
@@ -121,7 +121,7 @@ public class TestCreateUser {
 			User newUser = new User();
 
 			newUser.setPhoneNumber(9876543210L); // Negative phone number
-			newUser.setPassword("Njcat#10van");
+			newUser.setPassword("Njcat#10");
 			newUser.setAddress("");
 			newUser.setVoterId(12345);
 			newUser.setTalukId(1); // Assuming 1 is a valid taluk ID
@@ -141,7 +141,7 @@ public class TestCreateUser {
 			User newUser = new User();
 
 			newUser.setPhoneNumber(9876543210L); // Negative phone number
-			newUser.setPassword("Njcat#10van");
+			newUser.setPassword("Njcat#10");
 			newUser.setAddress(null);
 			newUser.setVoterId(12345);
 			newUser.setTalukId(1); // Assuming 1 is a valid taluk ID
@@ -161,7 +161,7 @@ public class TestCreateUser {
 			User newUser = new User();
 
 			newUser.setPhoneNumber(1234565890L);
-			newUser.setPassword("Njcat#10van");
+			newUser.setPassword("Njcat#10");
 			newUser.setAddress("123 Main St, City");
 			newUser.setVoterId(-2);
 			newUser.setTalukId(1);
@@ -181,7 +181,7 @@ public class TestCreateUser {
 			User newUser = new User();
 
 			newUser.setPhoneNumber(9876543210L);
-			newUser.setPassword("Njcat#10van");
+			newUser.setPassword("Njcat#10");
 			newUser.setAddress("123 Main St, City");
 			newUser.setVoterId(12345);
 			newUser.setTalukId(-1); // Invalid negative taluk ID
@@ -200,8 +200,8 @@ public class TestCreateUser {
 
 			User newUser = new User();
 
-			newUser.setPhoneNumber(8208285560L);
-			newUser.setPassword("Njcat#10van");
+			newUser.setPhoneNumber(8608285560L);
+			newUser.setPassword("Njcat#10");
 			newUser.setAddress("123 Main St, City");
 			newUser.setVoterId(12345);
 			newUser.setTalukId(1); // Assuming 1 is a valid taluk ID

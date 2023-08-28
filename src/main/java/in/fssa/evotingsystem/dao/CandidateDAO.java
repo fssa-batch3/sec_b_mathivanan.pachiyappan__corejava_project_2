@@ -32,7 +32,7 @@ public class CandidateDAO implements CandidateInterface {
 		PreparedStatement ps = null;
 
 		try {
-			String query = "INSERT INTO candidates (candidate_eno, election_id, created_at, name) VALUES ( ?, ?, ?, ? );";
+			String query = "INSERT INTO candidates (user_id, election_id, created_at, name) VALUES ( ?, ?, ?, ? );";
 			con = ConnectionUtil.getConnection();
 			ps = con.prepareStatement(query);
 
@@ -145,7 +145,7 @@ public class CandidateDAO implements CandidateInterface {
 		Candidate candidate = null;
 
 		try {
-			String query = "SELECT candidate_eno, election_id, name, created_at  FROM candidates  WHERE is_active = 1 and candidate_eno = ? ";
+			String query = "SELECT user_id, election_id, name, created_at  FROM candidates  WHERE is_active = 1 and user_id = ? ";
 			con = ConnectionUtil.getConnection();
 			ps = con.prepareStatement(query);
 			ps.setInt(1, candidateId);
@@ -153,7 +153,7 @@ public class CandidateDAO implements CandidateInterface {
 
 			if (rs.next()) {
 				candidate = new Candidate();
-				candidate.setCandidateId(rs.getInt("candidate_eno"));
+				candidate.setCandidateId(rs.getInt("user_id"));
 				candidate.setElectionId(rs.getInt("election_id"));
 				candidate.setCandidateName(rs.getString("name"));
 				LocalDate date = CandidateService.convertSqlDateToLocalDate(rs.getDate("created_at"));
@@ -186,7 +186,7 @@ public class CandidateDAO implements CandidateInterface {
 		Candidate matchedCandidate = null;
 
 		try {
-			String query = "SELECT candidate_eno, election_id, name, created_at FROM candidates WHERE id = ? AND is_active = 1";
+			String query = "SELECT user_id, election_id, name, created_at FROM candidates WHERE id = ? AND is_active = 1";
 			con = ConnectionUtil.getConnection();
 			ps = con.prepareStatement(query);
 			ps.setInt(1, Id);
@@ -194,7 +194,7 @@ public class CandidateDAO implements CandidateInterface {
 
 			if (rs.next()) {
 				matchedCandidate = new Candidate();
-				matchedCandidate.setCandidateId(rs.getInt("candidate_eno"));
+				matchedCandidate.setCandidateId(rs.getInt("user_id"));
 				matchedCandidate.setElectionId(rs.getInt("election_id"));
 				matchedCandidate.setCandidateName(rs.getString("name"));
 				LocalDate date = CandidateService.convertSqlDateToLocalDate(rs.getDate("created_at"));
@@ -228,14 +228,14 @@ public class CandidateDAO implements CandidateInterface {
 		List<Candidate> CandidateList = new ArrayList<Candidate>();
 
 		try {
-			String query = "SELECT candidate_eno, election_id, name, created_at from candidates where is_active = 1";
+			String query = "SELECT user_id, election_id, name, created_at from candidates where is_active = 1";
 			con = ConnectionUtil.getConnection();
 			ps = con.prepareStatement(query);
 			rs = ps.executeQuery();
 
 			while (rs.next()) {
 				Candidate candidates = new Candidate();
-				candidates.setCandidateId(rs.getInt("candidate_eno"));
+				candidates.setCandidateId(rs.getInt("user_id"));
 				candidates.setElectionId(rs.getInt("election_id"));
 				candidates.setCandidateName(rs.getString("name"));
 				LocalDate date = CandidateService.convertSqlDateToLocalDate(rs.getDate("created_at"));

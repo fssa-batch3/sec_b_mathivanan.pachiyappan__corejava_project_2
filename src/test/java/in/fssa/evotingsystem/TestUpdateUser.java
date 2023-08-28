@@ -21,7 +21,7 @@ public class TestUpdateUser {
 		User newUser = new User();
 
 		newUser.setPhoneNumber(9787264837L);
-        newUser.setPassword("Mathi@321"); // Set a password
+        newUser.setPassword("Njcat#10"); // Set a password
         newUser.setAddress("No 123, st str, chennai");
         newUser.setVoterId(6782);
         newUser.setTalukId(1);
@@ -93,7 +93,7 @@ public class TestUpdateUser {
 			User newUser = new User();
 
 			newUser.setPhoneNumber(9876543210L); // Negative phone number
-			newUser.setPassword("Njcat#10van");
+			newUser.setPassword("Njcat#10");
 			newUser.setAddress("");
 			newUser.setVoterId(12345);
 			newUser.setTalukId(1); // Assuming 1 is a valid taluk ID
@@ -113,7 +113,7 @@ public class TestUpdateUser {
 			User newUser = new User();
 
 			newUser.setPhoneNumber(9876543210L); // Negative phone number
-			newUser.setPassword("Njcat#10van");
+			newUser.setPassword("Njcat#10");
 			newUser.setAddress(null);
 			newUser.setVoterId(12345);
 			newUser.setTalukId(1); // Assuming 1 is a valid taluk ID
@@ -133,7 +133,7 @@ public class TestUpdateUser {
 			User newUser = new User();
 
 			newUser.setPhoneNumber(9876543210L);
-			newUser.setPassword("Njcat#10van");
+			newUser.setPassword("Njcat#10");
 			newUser.setAddress("123 Main St, City");
 			newUser.setVoterId(12345);
 			newUser.setTalukId(-1); // Invalid negative taluk ID
