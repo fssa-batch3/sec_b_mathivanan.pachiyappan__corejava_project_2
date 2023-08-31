@@ -26,7 +26,7 @@ public class TestGetAllElections {
 	public void getAllElections() {
 		assertDoesNotThrow(() -> {
 		ElectionService electionService = new ElectionService();
-		System.out.println(electionService.getAllElection());
+		System.out.println(electionService.getAllElections());
 		});
 	}
 }

@@ -31,7 +31,7 @@ public class CandidateValidator {
 			throw new ValidationException("Invalid Election ID");
 		}
 
-		if (newCandidate.getCandidateId() < 1) {
+		if (newCandidate.getCandidateId() < 1 || newCandidate.getCandidateId() >= 999999999) {
 			throw new ValidationException("Candidate ID cannot be 0 or negative");
 		}
 
@@ -104,5 +104,57 @@ public class CandidateValidator {
 			throw new ValidationException("Invalid Candidate Date");
 		}
 	}
+	
+	/**
+	 * Validates the attributes of an updated Candidate entity.
+	 *
+	 * @param updatedCandidate The updated Candidate object to be validated.
+	 * @throws ValidationException If the updated Candidate object or its attributes are invalid.
+	 */
+	public static void validateUpdate(int id, Candidate updatedCandidate) throws ValidationException {
+
+	    if (updatedCandidate == null) {
+	        throw new ValidationException("Invalid Candidate Input for Update");
+	    }
+
+	    if (id < 1) {
+	        throw new ValidationException("Invalid Candidate ID for Update");
+	    }
+
+	    if (updatedCandidate.getElectionId() <= 0 || updatedCandidate.getElectionId() >= 999999999) {
+	        throw new ValidationException("Invalid Election ID for Update");
+	    }
+
+	    if (updatedCandidate.getCandidateId() < 1 || updatedCandidate.getCandidateId() >= 999999999) {
+	        throw new ValidationException("Candidate ID cannot be 0 or negative for Update");
+	    }
+
+	    isCandidateIdExistsForUpdate(updatedCandidate.getId(), updatedCandidate.getCandidateId());
+
+	    StringUtil.rejectIfInvalidString(updatedCandidate.getCandidateName(), "Candidate Name for Update");
+
+	    validateDate(updatedCandidate.getCreatedAt());
+	}
+
+	/**
+	 * Checks if a candidate ID already exists in the database for a candidate other than the given ID.
+	 *
+	 * @param candidateId The ID of the candidate being updated.
+	 * @param newCandidateId The new candidate ID to check.
+	 * @throws ValidationException If the candidate ID already exists for another candidate.
+	 */
+	public static void isCandidateIdExistsForUpdate(int candidateId, int newCandidateId) throws ValidationException {
+
+	    CandidateDAO candidateDAO = new CandidateDAO();
+	    try {
+	        Candidate existingCandidate = candidateDAO.findByCandidateId(newCandidateId);
+	        if (existingCandidate != null && existingCandidate.getId() != candidateId) {
+	            throw new ValidationException("Candidate ID already exists for another candidate");
+	        }
+	    } catch (PersistanceException e) {
+	        throw new ValidationException(e.getMessage());
+	    }
+	}
+
 
 }

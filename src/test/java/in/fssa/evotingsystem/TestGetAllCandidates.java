@@ -15,7 +15,7 @@ public class TestGetAllCandidates {
 
 		assertDoesNotThrow(() -> {
 
-			Candidate findUser = candidateService.findByElectionId(4);
+			Candidate findUser = candidateService.findByCandidateId(4);
 			System.out.println(findUser);
 
 		});
@@ -26,7 +26,7 @@ public class TestGetAllCandidates {
 	public void getAllCandidates() {
 		assertDoesNotThrow(() -> {
 			CandidateService candidateService = new CandidateService();
-			System.out.println(candidateService.getAllElection());
+			System.out.println(candidateService.getAllCandidates());
 		});
 
 	}

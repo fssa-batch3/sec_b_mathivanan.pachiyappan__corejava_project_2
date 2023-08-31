@@ -4,8 +4,6 @@ import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.util.Random;
-
 import org.junit.jupiter.api.Test;
 
 import in.fssa.evotingsystem.exception.ValidationException;
@@ -15,22 +13,21 @@ import in.fssa.evotingsystem.service.UserService;
 public class TestUpdateUser {
 
 	@Test
-    public void testUpdateUserWithValidData() {
-        UserService userService = new UserService();
-
-		User newUser = new User();
-
-		newUser.setPhoneNumber(9787264837L);
-        newUser.setPassword("Njcat#10"); // Set a password
-        newUser.setAddress("No 123, st str, chennai");
-        newUser.setVoterId(6782);
-        newUser.setTalukId(1);
-
-        // Assuming your update method returns some status or throws an exception, adjust accordingly
-        assertDoesNotThrow(() -> {
-            userService.updateUser(5, newUser);
-        });
-    }
+	public void testUpdateUser() {
+	    
+	    User updatedUser = new User();
+	    updatedUser.setPassword("Njact#10");
+	    updatedUser.setPhoneNumber(7492498077L);
+	    updatedUser.setVoterId(123456);
+	    updatedUser.setTalukId(5);
+	    updatedUser.setAddress("123 Main St, City");
+	    
+	    UserService userService = new UserService();
+	    
+	    assertDoesNotThrow(() -> {
+	        userService.updateUser(3, updatedUser);
+	    });
+	}
 
 	@Test
 	public void testDeleteUserWithInvalidId() {
@@ -44,7 +41,7 @@ public class TestUpdateUser {
 		assertTrue(expectedMessage.equals(actualMessage));
 
 	}
-	
+
 	@Test
 	public void testUpdateUserWithPasswordEmpty() {
 		UserService userService = new UserService();
@@ -144,6 +141,5 @@ public class TestUpdateUser {
 		String actualMessage = exception.getMessage();
 		assertTrue(expectedMessage.equals(actualMessage));
 	}
-
 
 }

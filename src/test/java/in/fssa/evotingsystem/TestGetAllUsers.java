@@ -26,7 +26,7 @@ public class TestGetAllUsers {
 	public void getAllUsers() {
 		assertDoesNotThrow(() -> {
 			UserService userService = new UserService();
-			System.out.println(userService.getAllUser());
+			System.out.println(userService.getAllUsers());
 
 		});
 

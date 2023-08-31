@@ -32,7 +32,7 @@ public class TestCreateUser {
 		User newUser = new User();
 
 		newUser.setPhoneNumber(randNum);
-		newUser.setPassword("Njcat#10");
+		newUser.setPassword("Njcat#11");
 		newUser.setAddress("112 Main St, City");
 		newUser.setVoterId(6782);
 		newUser.setTalukId(1); // Assuming 1 is a valid taluk ID

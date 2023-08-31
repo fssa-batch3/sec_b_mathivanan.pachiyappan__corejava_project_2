@@ -5,7 +5,6 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.time.LocalDate;
-import java.util.Random;
 
 import org.junit.jupiter.api.Test;
 
@@ -14,22 +13,21 @@ import in.fssa.evotingsystem.model.Candidate;
 import in.fssa.evotingsystem.service.CandidateService;
 
 public class TestUpdateCandidate {
-
+	
 	@Test
-	public void testUpdateCandidateWithVaidData() {
+	public void testUpdateCandidate() {
+		// Create a mock candidate object with updated data
+		Candidate updatedCandidate = new Candidate();
+		updatedCandidate.setCandidateId(123); // Example candidate ID
+		updatedCandidate.setElectionId(456); // Example election ID
+		updatedCandidate.setCandidateName("John Doe");
+		updatedCandidate.setCreatedAt(LocalDate.now());
 
 		CandidateService candidateService = new CandidateService();
-		Candidate newCandidate = new Candidate();
 
-		newCandidate.setCandidateId(37652);
-		newCandidate.setElectionId(2);
-		newCandidate.setCandidateName("Modi");
-		newCandidate.setCreatedAt(LocalDate.of(2023, 12, 3));
-
-		
-		   assertDoesNotThrow(() -> {
-			   candidateService.updateElection(2, newCandidate);
-	        });
+		assertDoesNotThrow(() -> {
+			candidateService.updateCandidate(3, updatedCandidate);
+	    });
 	}
 
 	@Test
@@ -37,14 +35,14 @@ public class TestUpdateCandidate {
 
 		CandidateService candidateService = new CandidateService();
 		Exception exception = assertThrows(ValidationException.class, () -> {
-			candidateService.deleteElection(-2);
+			candidateService.deleteCandidate(-2);
 		});
 		String expectedMessage = "ID cannot be 0 or negative";
 		String actualMessage = exception.getMessage();
 		assertTrue(expectedMessage.equals(actualMessage));
 
 	}
-	
+
 	@Test
 	public void testCreateCandidateWithNameEmpty() {
 		CandidateService candidateService = new CandidateService();

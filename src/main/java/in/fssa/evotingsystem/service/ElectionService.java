@@ -75,7 +75,7 @@ public class ElectionService {
 			ElectionValidator.validate(election);
 			electionDAO.create(election);
 		} catch (PersistanceException e) {
-			throw new ServiceException("Failed to Create Election");
+			throw new ServiceException(e.getMessage());
 		}
 	}
 
@@ -89,12 +89,13 @@ public class ElectionService {
 	 */
 	public void updateElection(int newId, Election election) throws ServiceException, ValidationException {
 		try {
+			ElectionValidator.isElectionIdExistsForUpdate(newId, election.getId());
 			ElectionValidator.isIdExists(newId);
-			ElectionValidator.validate(election);
+			ElectionValidator.validateUpdate(newId, election);
 
 			electionDAO.update(newId, election);
 		} catch (PersistanceException e) {
-			throw new ServiceException("Failed to Update Election");
+			throw new ServiceException(e.getMessage());
 		}
 	}
 
@@ -111,7 +112,7 @@ public class ElectionService {
 			ElectionValidator.validateId(id);
 			electionDAO.delete(id);
 		} catch (PersistanceException e) {
-			throw new ServiceException("Failed to Delete Election");
+			throw new ServiceException(e.getMessage());
 		}
 	}
 
@@ -128,7 +129,7 @@ public class ElectionService {
 			ElectionValidator.validateId(newId);
 			return electionDAO.findById(newId);
 		} catch (PersistanceException e) {
-			throw new ServiceException("Failed to Find Election");
+			throw new ServiceException(e.getMessage());
 		}
 	}
 
@@ -138,11 +139,11 @@ public class ElectionService {
 	 * @return The list of all elections.
 	 * @throws ServiceException If there was an issue retrieving the elections.
 	 */
-	public List<Election> getAllElection() throws ServiceException {
+	public List<Election> getAllElections() throws ServiceException {
 		try {
 			return electionDAO.findAll();
 		} catch (PersistanceException e) {
-			throw new ServiceException("Failed to List All Elections");
+			throw new ServiceException(e.getMessage());
 		}
 	}
 }

@@ -19,7 +19,7 @@ public class TestCreateCandidate {
 	public void testCreateCandidateWithValidData() {
 		CandidateService candidateService = new CandidateService();
 
-		int min = 600000001;
+		int min = 1;
 		int max = 999999999;
 		int genarate = 1000;
 		Random rand = new Random();

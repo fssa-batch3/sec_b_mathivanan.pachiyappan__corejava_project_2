@@ -1,6 +1,5 @@
 package in.fssa.evotingsystem.validator;
 
-
 import in.fssa.evotingsystem.dao.UserDAO;
 import in.fssa.evotingsystem.exception.PersistanceException;
 import in.fssa.evotingsystem.exception.ValidationException;
@@ -120,6 +119,71 @@ public class UserValidator {
 
 	private static boolean isValidPassword(String password) {
 		return password.matches(PASSWORD_PATTERN);
+	}
+
+	/**
+	 * Validates the attributes of an updated User entity.
+	 *
+	 * @param updatedUser The updated User object to be validated.
+	 * @throws ValidationException If the updated User object or its attributes are
+	 *                             invalid.
+	 */
+	public static void validateUpdate(int id,User updatedUser) throws ValidationException {
+
+		if (updatedUser == null) {
+			throw new ValidationException("Invalid User Input for Update");
+		}
+
+		if (id < 1) {
+			throw new ValidationException("Invalid User ID for Update");
+		}
+
+		if (updatedUser.getPassword() != null && !updatedUser.getPassword().trim().isEmpty()) {
+			if (StringUtil.isInvalidString(updatedUser.getPassword())) {
+				throw new ValidationException("Invalid Password for Update");
+			}
+			if (!isValidPassword(updatedUser.getPassword())) {
+				throw new ValidationException("Password for Update must be at least 8 characters");
+			}
+		}
+
+		if (updatedUser.getPhoneNumber() <= 600000001L || updatedUser.getPhoneNumber() >= 9999999999L) {
+			throw new ValidationException("Invalid Phone Number for Update");
+		}
+
+		isPhoneNumberExistsForUpdate(updatedUser.getId(), updatedUser.getPhoneNumber());
+
+		if (updatedUser.getVoterId() <= 0 || updatedUser.getVoterId() >= 999999999) {
+			throw new ValidationException("Invalid Voter ID for Update");
+		}
+
+		if (updatedUser.getTalukId() <= 0) {
+			throw new ValidationException("Invalid Taluk ID for Update");
+		}
+
+		StringUtil.rejectIfInvalidString(updatedUser.getAddress(), "Address for Update");
+	}
+
+	/**
+	 * Checks if a phone number already exists in the database for a user other than
+	 * the given ID.
+	 *
+	 * @param userId      The ID of the user being updated.
+	 * @param phoneNumber The phone number to check.
+	 * @throws ValidationException If the phone number is not valid or if it already
+	 *                             exists.
+	 */
+	public static void isPhoneNumberExistsForUpdate(int userId, long phoneNumber) throws ValidationException {
+
+		UserDAO userDAO = new UserDAO();
+		try {
+			User existingUser = userDAO.findByPhoneNumber(phoneNumber);
+			if (existingUser != null && existingUser.getId() != userId) {
+				throw new ValidationException("Phone number already exists for another user");
+			}
+		} catch (PersistanceException e) {
+			throw new ValidationException(e.getMessage());
+		}
 	}
 
 }

@@ -111,10 +111,11 @@ public class CandidateDAO implements CandidateInterface {
 		PreparedStatement ps = null;
 
 		try {
-			String query = "UPDATE candidates SET name = ? Where is_active = 1";
+			String query = "UPDATE candidates SET name = ? Where id = 1";
 			con = ConnectionUtil.getConnection();
 			ps = con.prepareStatement(query);
 			ps.setString(1, newCandidate.getCandidateName());
+			ps.setInt(2, id);
 
 			ps.executeUpdate();
 
@@ -186,7 +187,7 @@ public class CandidateDAO implements CandidateInterface {
 		Candidate matchedCandidate = null;
 
 		try {
-			String query = "SELECT user_id, election_id, name, created_at FROM candidates WHERE id = ? AND is_active = 1";
+			String query = "SELECT user_id, election_id, name, created_at FROM candidates WHERE is_active = 1 AND id = ?";
 			con = ConnectionUtil.getConnection();
 			ps = con.prepareStatement(query);
 			ps.setInt(1, Id);

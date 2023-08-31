@@ -37,7 +37,7 @@ CREATE TABLE elections (
 
 CREATE TABLE candidates (
     id INT PRIMARY KEY AUTO_INCREMENT,
-    candidate_eno INT not null,
+    user_id INT not null,
     election_id INT not null,
     name VARCHAR(255) not null,
     created_at DATE not null,

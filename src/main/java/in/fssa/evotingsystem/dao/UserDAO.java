@@ -107,12 +107,13 @@ public class UserDAO implements UserInterface {
 		PreparedStatement ps = null;
 
 		try {
-			String query = "UPDATE users SET password = ?, address = ?, taluk_id = ? Where is_active = 1";
+			String query = "UPDATE users SET password = ?, address = ?, taluk_id = ? Where id = ?";
 			con = ConnectionUtil.getConnection();
 			ps = con.prepareStatement(query);
 			ps.setString(1, newUser.getAddress());
 			ps.setString(2, newUser.getPassword());
 			ps.setInt(3, newUser.getTalukId());
+			ps.setInt(4, id);
 
 			ps.executeUpdate();
 

@@ -112,7 +112,7 @@ public class ElectionDAO implements ElectionInterface{
 		PreparedStatement ps = null;
 
 		try {
-			String query = "UPDATE elections SET booth_address = ?, election_name = ?, election_date = ?, taluk_id = ? Where is_active = 1";
+			String query = "UPDATE elections SET booth_address = ?, election_name = ?, election_date = ? Where id = ?";
 			con = ConnectionUtil.getConnection();
 			ps = con.prepareStatement(query);
 			ps.setString(1, newElection.getBoothAddress());
@@ -122,7 +122,7 @@ public class ElectionDAO implements ElectionInterface{
 			java.sql.Date dueDateSql = new java.sql.Date(dueDateUtil.getTime());
 
 			ps.setDate(3, dueDateSql);
-			ps.setInt(4, newElection.getTalukId());
+			ps.setInt(4, id);
 
 			ps.executeUpdate();
 
@@ -195,7 +195,7 @@ public class ElectionDAO implements ElectionInterface{
 		List<Election> ElectionList = new ArrayList<Election>();
 
 		try {
-			String query = "SELECT booth_address, election_name, election_date, taluk_id from elections where is_active = 1";
+			String query = "SELECT booth_address, election_name, election_date, taluk_id,id from elections where is_active = 1";
 			con = ConnectionUtil.getConnection();
 			ps = con.prepareStatement(query);
 			rs = ps.executeQuery();
@@ -207,6 +207,7 @@ public class ElectionDAO implements ElectionInterface{
 				LocalDate date = ElectionService.convertSqlDateToLocalDate(rs.getDate("election_date"));
 				newElection.setElectionDate(date);
 				newElection.setTalukId(rs.getInt("taluk_id"));
+				newElection.setId(rs.getInt("id"));
 
 				ElectionList.add(newElection);
 			}

@@ -18,7 +18,7 @@ public class TestDeleteCandidate {
 			CandidateService userService = new CandidateService();
 			CandidateDAO app = new CandidateDAO();
 			app.changeActive(1);
-			userService.deleteElection(1);
+			userService.deleteCandidate(1);
 		});
 	}
 	
@@ -27,7 +27,7 @@ public class TestDeleteCandidate {
 
 		CandidateService candidateService = new CandidateService();
 		Exception exception = assertThrows(ValidationException.class, () -> {
-			candidateService.deleteElection(-2);
+			candidateService.deleteCandidate(-2);
 		});
 		String expectedMessage = "ID cannot be 0 or negative";
 		String actualMessage = exception.getMessage();

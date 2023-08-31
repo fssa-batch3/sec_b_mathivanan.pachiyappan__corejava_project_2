@@ -30,7 +30,7 @@ public class UserService {
 			UserValidator.validate(user);
 			userDAO.create(user);
 		} catch (PersistanceException e) {
-			throw new ServiceException("Failed to Create User");
+			throw new ServiceException(e.getMessage());
 		}
 	}
 
@@ -46,12 +46,13 @@ public class UserService {
 	public void updateUser(int newId, User newUser) throws ServiceException, ValidationException {
 
 		try {
+			UserValidator.isPhoneNumberExistsForUpdate(newId, newUser.getPhoneNumber());
 			UserValidator.isIdExists(newId);
-			UserValidator.validate(newUser);
+			UserValidator.validateUpdate(newId,newUser);
 		
 			userDAO.update(newId, newUser);
 		} catch (PersistanceException e) {
-			throw new ServiceException("Failed to Update User");
+			throw new ServiceException(e.getMessage());
 		}
 
 	}
@@ -70,7 +71,7 @@ public class UserService {
 			UserValidator.isIdExists(id);
 			userDAO.delete(id);
 		} catch (PersistanceException e) {
-			throw new ServiceException("Failed to Delete User");
+			throw new ServiceException(e.getMessage());
 		}
 	}
 
@@ -88,7 +89,7 @@ public class UserService {
 			UserValidator.isIdExists(id);
 			return userDAO.findById(id);
 		} catch (PersistanceException e) {
-			throw new ServiceException("Failed to Find User by Id");
+			throw new ServiceException(e.getMessage());
 		}
 	}
 	
@@ -97,7 +98,7 @@ public class UserService {
 			UserValidator.isPhoneNumberExists(number);
 			return userDAO.findByPhoneNumber(number);
 		} catch (PersistanceException e) {
-			throw new ServiceException("Failed to Find User using Phone Number");
+			throw new ServiceException(e.getMessage());
 		}
 	}
 
@@ -107,11 +108,11 @@ public class UserService {
      * @return The list of all users.
      * @throws ServiceException If there was an issue retrieving the users.
      */
-	public List<User> getAllUser() throws ServiceException {
+	public List<User> getAllUsers() throws ServiceException {
 		try {
 			return userDAO.findAll();
 		} catch (PersistanceException e) {
-			throw new ServiceException("Failed to List All Users");
+			throw new ServiceException(e.getMessage());
 		}
 	}
 }

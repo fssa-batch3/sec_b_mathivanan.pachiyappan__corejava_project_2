@@ -29,7 +29,7 @@ public class TalukService {
             TalukValidator.validate(taluk);
             talukDAO.create(taluk);
         } catch (PersistanceException e) {
-            throw new ServiceException("Failed to Create Taluk");
+            throw new ServiceException(e.getMessage());
         }
     }
 
@@ -47,7 +47,7 @@ public class TalukService {
             TalukValidator.isIdExists(newId);
             talukDAO.update(newId, newTaluk);
         } catch (PersistanceException e) {
-            throw new ServiceException("Failed to Update Taluk");
+            throw new ServiceException(e.getMessage());
         }
     }
 
@@ -81,7 +81,7 @@ public class TalukService {
             TalukValidator.isIdExists(id);
             talukDAO.delete(id);
         } catch (PersistanceException e) {
-            throw new ServiceException("Failed to Delete Taluk");
+            throw new ServiceException(e.getMessage());
         }
     }
 
@@ -95,7 +95,7 @@ public class TalukService {
         try {
             return talukDAO.findAll();
         } catch (PersistanceException e) {
-            throw new ServiceException("Failed to List All Taluks");
+            throw new ServiceException(e.getMessage());
         }
     }
 }

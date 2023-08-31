@@ -16,21 +16,19 @@ public class TestUpdateElection {
 
 	@Test
 	public void testUpdateElectionWithValidData() {
+	    Election updateElection = new Election();
+	    updateElection.setBoothAddress("Community Hall");
+	    updateElection.setElectionName("Prime Minister Election 2023");
+	    updateElection.setElectionDate(LocalDate.of(2023, 9, 12));
+	    updateElection.setTalukId(1);
 
-		ElectionService electionService = new ElectionService();
+	    ElectionService electionService = new ElectionService();
 
-		Election newElection = new Election();
-
-		newElection.setBoothAddress("Coomunity Mahal");
-		newElection.setElectionName("Prime minister election 2023");
-		newElection.setElectionDate(LocalDate.of(2023, 9, 12));
-		newElection.setTalukId(1);
-
-		assertDoesNotThrow(() -> {
-			electionService.updateElection(4, newElection);
-		});
-
+	    assertDoesNotThrow(() -> {
+	        electionService.updateElection(3, updateElection);
+	    });
 	}
+
 
 	@Test
 	public void testDeleteElectionWithInvalidId() {
