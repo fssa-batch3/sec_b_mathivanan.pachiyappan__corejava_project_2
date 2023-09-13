@@ -19,7 +19,7 @@ public class TestUpdateUser {
 	    updatedUser.setPassword("Njact#10");
 	    updatedUser.setPhoneNumber(7492498077L);
 	    updatedUser.setVoterId(123456);
-	    updatedUser.setTalukId(5);
+	    updatedUser.setTalukId(3);
 	    updatedUser.setAddress("123 Main St, City");
 	    
 	    UserService userService = new UserService();

@@ -29,7 +29,6 @@ public class UserDAO implements UserInterface {
 		Connection con = null;
 		PreparedStatement ps = null;
 
-		// TODO table name
 		try {
 			String query = "INSERT INTO users (id, phone_number, password, address, voter_id, taluk_id) VALUES ( ?, ?, ?, ?, ?, ? );";
 			con = ConnectionUtil.getConnection();
@@ -144,7 +143,7 @@ public class UserDAO implements UserInterface {
 		User user = null;
 
 		try {
-			String query = "SELECT phone_number, address, voter_id, taluk_id FROM users  WHERE is_active = 1 and phone_number = ? ";
+			String query = "SELECT phone_number, password, address, voter_id, taluk_id FROM users  WHERE is_active = 1 and phone_number = ? ";
 			con = ConnectionUtil.getConnection();
 			ps = con.prepareStatement(query);
 			ps.setLong(1, userPhoneNo);
@@ -154,6 +153,7 @@ public class UserDAO implements UserInterface {
 				user = new User();
 				user.setPhoneNumber(rs.getLong("phone_number"));
 				user.setAddress(rs.getString("address"));
+				user.setPassword(rs.getString("password"));
 				user.setVoterId(rs.getInt("voter_id"));
 				user.setTalukId(rs.getInt("taluk_id"));
 			}
@@ -169,6 +169,7 @@ public class UserDAO implements UserInterface {
 		return user;
 	}
 
+	
 	/**
 	 * Retrieves a User entity from the database based on the provided user ID.
 	 *
@@ -183,7 +184,7 @@ public class UserDAO implements UserInterface {
 	    User matchedUser = null;
 
 	    try {
-	        String query = "SELECT phone_number, address, voter_id, taluk_id FROM users WHERE id = ? AND is_active = 1";
+	        String query = "SELECT phone_number, password, address, voter_id, taluk_id FROM users WHERE id = ? AND is_active = 1";
 	        con = ConnectionUtil.getConnection();
 	        ps = con.prepareStatement(query);
 	        ps.setInt(1, userId);
@@ -192,6 +193,7 @@ public class UserDAO implements UserInterface {
 	        if (rs.next()) {
 	            matchedUser = new User();
 	            matchedUser.setPhoneNumber(rs.getLong("phone_number"));
+	            matchedUser.setPassword(rs.getString("password"));
 	            matchedUser.setAddress(rs.getString("address"));
 	            matchedUser.setVoterId(rs.getInt("voter_id"));
 	            matchedUser.setTalukId(rs.getInt("taluk_id"));
@@ -225,7 +227,7 @@ public class UserDAO implements UserInterface {
 		List<User> userList = new ArrayList<User>();
 
 		try {
-			String query = "SELECT phone_number, address, voter_id, taluk_id from users where is_active = 1";
+			String query = "SELECT phone_number, address, voter_id, taluk_id, id , password from users where is_active = 1";
 			con = ConnectionUtil.getConnection();
 			ps = con.prepareStatement(query);
 			rs = ps.executeQuery();
@@ -236,6 +238,8 @@ public class UserDAO implements UserInterface {
 				newUser.setAddress(rs.getString("address"));
 				newUser.setVoterId(rs.getInt("voter_id"));
 				newUser.setTalukId(rs.getInt("taluk_id"));
+				newUser.setId(rs.getInt("id"));
+				newUser.setPassword(rs.getString("password"));
 
 				userList.add(newUser);
 			}

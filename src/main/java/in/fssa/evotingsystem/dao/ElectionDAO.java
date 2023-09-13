@@ -195,7 +195,7 @@ public class ElectionDAO implements ElectionInterface{
 		List<Election> ElectionList = new ArrayList<Election>();
 
 		try {
-			String query = "SELECT booth_address, election_name, election_date, taluk_id,id from elections where is_active = 1";
+			String query = "SELECT booth_address, election_name, election_date, taluk_id, id from elections where is_active = 1";
 			con = ConnectionUtil.getConnection();
 			ps = con.prepareStatement(query);
 			rs = ps.executeQuery();

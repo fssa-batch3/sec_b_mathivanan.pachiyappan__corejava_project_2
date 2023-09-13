@@ -22,7 +22,7 @@ public class TestUpdateTaluk {
 		newTaluk.setTalukName("U1");
 
 		assertDoesNotThrow(() -> {
-			talukService.updateTaluk(5, newTaluk);
+			talukService.updateTaluk(3, newTaluk);
 		});
 	}
 

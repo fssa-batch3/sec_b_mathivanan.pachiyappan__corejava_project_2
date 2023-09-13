@@ -20,12 +20,12 @@ public class TestUpdateElection {
 	    updateElection.setBoothAddress("Community Hall");
 	    updateElection.setElectionName("Prime Minister Election 2023");
 	    updateElection.setElectionDate(LocalDate.of(2023, 9, 12));
-	    updateElection.setTalukId(1);
+	    updateElection.setTalukId(3);
 
 	    ElectionService electionService = new ElectionService();
 
 	    assertDoesNotThrow(() -> {
-	        electionService.updateElection(3, updateElection);
+	        electionService.updateElection(5, updateElection);
 	    });
 	}
 

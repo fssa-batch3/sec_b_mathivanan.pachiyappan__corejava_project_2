@@ -9,278 +9,225 @@ import java.util.ArrayList;
 import java.util.List;
 
 import in.fssa.evotingsystem.exception.PersistanceException;
-import in.fssa.evotingsystem.interfaces.CandidateInterface;
 import in.fssa.evotingsystem.model.Candidate;
-import in.fssa.evotingsystem.service.CandidateService;
 import in.fssa.evotingsystem.util.ConnectionUtil;
 
-/**
- * The CandidateDAO class provides methods to interact with the database and
- * perform operations related to Candidate entities.
- */
-public class CandidateDAO implements CandidateInterface {
+public class CandidateDAO {
 
-	/**
-	 * Creates a new Candidate entity in the database.
-	 *
-	 * @param candidate The Candidate object to be created.
-	 * @throws PersistanceException If there's an issue with the database operation.
-	 */
-	@Override
-	public void create(Candidate candidate) throws PersistanceException {
-		Connection con = null;
-		PreparedStatement ps = null;
+    public void create(Candidate candidate) throws PersistanceException {
+        Connection con = null;
+        PreparedStatement ps = null;
 
-		try {
-			String query = "INSERT INTO candidates (user_id, election_id, created_at, name) VALUES ( ?, ?, ?, ? );";
-			con = ConnectionUtil.getConnection();
-			ps = con.prepareStatement(query);
+        try {
+            String query = "INSERT INTO candidates (user_id, election_id, name, party_name, image_url, created_at) VALUES ( ?, ?, ?, ?, ?, ? )";
+            con = ConnectionUtil.getConnection();
+            ps = con.prepareStatement(query);
 
-			ps.setInt(1, candidate.getCandidateId());
-			ps.setInt(2, candidate.getElectionId());
+            ps.setInt(1, candidate.getUserId());
+            ps.setInt(2, candidate.getElectionId());
+            ps.setString(3, candidate.getName());
+            ps.setString(4, candidate.getPartyName());
+            ps.setString(5, candidate.getImageUrl());
+            ps.setDate(6, java.sql.Date.valueOf(candidate.getCreatedAt()));
+            
+            ps.executeUpdate();
 
-			java.util.Date candidateDateUtil = CandidateService.convertDate(candidate.getCreatedAt());
-			java.sql.Date candidateDateSql = new java.sql.Date(candidateDateUtil.getTime());
+            System.out.println("Candidate Successfully Created");
 
-			ps.setDate(3, candidateDateSql);
+        } catch (SQLException e) {
+            if (e.getMessage().contains("Duplicate entry")) {
+                throw new PersistanceException("Duplicate constraint");
+            } else {
+                System.out.println(e.getMessage());
+                throw new PersistanceException(e);
+            }
 
-			ps.setString(4, candidate.getCandidateName());
+        } finally {
+            ConnectionUtil.close(con, ps);
+        }
+    }
 
-			ps.executeUpdate();
+    public void delete(int id) throws PersistanceException {
+        Connection con = null;
+        PreparedStatement ps = null;
 
-			System.out.println("Candidate Successfully Created :");
+        try {
+            String query = "UPDATE candidates SET is_active = false WHERE id = ?";
+            con = ConnectionUtil.getConnection();
+            ps = con.prepareStatement(query);
+            ps.setInt(1, id);
 
-		} catch (SQLException e) {
-			if (e.getMessage().contains("Duplicate entry")) {
-				throw new PersistanceException("Duplicate constraint");
-			} else {
-				System.out.println(e.getMessage());
-				throw new PersistanceException(e);
-			}
+            int rowsAffected = ps.executeUpdate();
+            if (rowsAffected > 0) {
+                System.out.println("Candidate with ID " + id + " set as inactive.");
+            } else {
+                System.out.println("Candidate with ID " + id + " not found.");
+            }
 
-		} finally {
-			ConnectionUtil.close(con, ps);
-		}
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.out.println(e.getMessage());
+            throw new PersistanceException(e);
+        } finally {
+            ConnectionUtil.close(con, ps);
+        }
+    }
 
-	}
+    public void update(int id, Candidate newCandidate) throws PersistanceException {
+        Connection con = null;
+        PreparedStatement ps = null;
 
-	/**
-	 * Marks a Candidate entity as inactive in the database.
-	 *
-	 * @param newId The ID of the Candidate to be marked as inactive.
-	 * @throws PersistanceException If there's an issue with the database operation.
-	 */
-	@Override
-	public void delete(int newId) throws PersistanceException {
-		Connection con = null;
-		PreparedStatement ps = null;
+        try {
+            String query = "UPDATE candidates SET name = ?, party_name = ?, image_url = ? WHERE id = ?";
+            con = ConnectionUtil.getConnection();
+            ps = con.prepareStatement(query);
+            ps.setString(1, newCandidate.getName());
+            ps.setString(2, newCandidate.getPartyName());
+            ps.setString(3, newCandidate.getImageUrl());
+            ps.setInt(4, id);
 
-		try {
-			String query = "UPDATE candidates SET is_active = false WHERE id = ?";
-			con = ConnectionUtil.getConnection();
-			ps = con.prepareStatement(query);
-//	        ps.setBoolean(1, false);
-			ps.setInt(1, newId);
+            ps.executeUpdate();
 
-			int rowsAffected = ps.executeUpdate();
-			if (rowsAffected > 0) {
-				System.out.println("Candidate with ID " + newId + " set as inactive.");
-			} else {
-				System.out.println("Candidate with ID " + newId + " not found.");
-			}
+            System.out.println("Candidate Successfully Updated");
 
-		} catch (SQLException e) {
-			e.printStackTrace();
-			System.out.println(e.getMessage());
-			throw new PersistanceException(e);
-		} finally {
-			ConnectionUtil.close(con, ps);
-		}
-	}
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.out.println(e.getMessage());
+            throw new PersistanceException(e);
+        } finally {
+            ConnectionUtil.close(con, ps);
+        }
+    }
 
-	/**
-	 * Updates a Candidate entity's information in the database.
-	 *
-	 * @param id           The ID of the Candidate to be updated.
-	 * @param newCandidate The updated Candidate object.
-	 * @throws PersistanceException If there's an issue with the database operation.
-	 */
-	@Override
-	public void update(int id, Candidate newCandidate) throws PersistanceException {
-		Connection con = null;
-		PreparedStatement ps = null;
+    public Candidate findByUserId(int userId) throws PersistanceException {
+        Connection con = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        Candidate candidate = null;
 
-		try {
-			String query = "UPDATE candidates SET name = ? Where id = 1";
-			con = ConnectionUtil.getConnection();
-			ps = con.prepareStatement(query);
-			ps.setString(1, newCandidate.getCandidateName());
-			ps.setInt(2, id);
+        try {
+            String query = "SELECT * FROM candidates WHERE is_active = true AND user_id = ?";
+            con = ConnectionUtil.getConnection();
+            ps = con.prepareStatement(query);
+            ps.setInt(1, userId);
+            rs = ps.executeQuery();
 
-			ps.executeUpdate();
+            if (rs.next()) {
+                candidate = new Candidate();
+                candidate.setId(rs.getInt("id"));
+                candidate.setUserId(rs.getInt("user_id"));
+                candidate.setElectionId(rs.getInt("election_id"));
+                candidate.setName(rs.getString("name"));
+                candidate.setPartyName(rs.getString("party_name"));
+                candidate.setImageUrl(rs.getString("image_url"));
+                LocalDate createdAt = rs.getDate("created_at").toLocalDate();
+                candidate.setCreatedAt(createdAt);
+                candidate.setActive(rs.getBoolean("is_active"));
+            }
 
-			System.out.println("Election Successfully Updated");
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.out.println(e.getMessage());
+            throw new PersistanceException(e);
+        } finally {
+            ConnectionUtil.close(con, ps, rs);
+        }
 
-		} catch (SQLException e) {
-			e.printStackTrace();
-			System.out.println(e.getMessage());
-			throw new PersistanceException(e);
-		} finally {
-			ConnectionUtil.close(con, ps);
-		}
+        return candidate;
+    }
 
-	}
+    public Candidate findById(int id) throws PersistanceException {
+        Connection con = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        Candidate candidate = null;
 
-	/**
-	 * Find a user by their phone number.
-	 *
-	 * @param candidateId The CandidateId to search for.
-	 * @return The Candidate object if found, null otherwise.
-	 * @throws PersistanceException If there's an issue with database access.
-	 */
-	public Candidate findByCandidateId(int candidateId) throws PersistanceException {
-		Connection con = null;
-		PreparedStatement ps = null;
-		ResultSet rs = null;
+        try {
+            String query = "SELECT * FROM candidates WHERE is_active = true AND id = ?";
+            con = ConnectionUtil.getConnection();
+            ps = con.prepareStatement(query);
+            ps.setInt(1, id);
+            rs = ps.executeQuery();
 
-		Candidate candidate = null;
+            if (rs.next()) {
+                candidate = new Candidate();
+                candidate.setId(rs.getInt("id"));
+                candidate.setUserId(rs.getInt("user_id"));
+                candidate.setElectionId(rs.getInt("election_id"));
+                candidate.setName(rs.getString("name"));
+                candidate.setPartyName(rs.getString("party_name"));
+                candidate.setImageUrl(rs.getString("image_url"));
+                LocalDate createdAt = rs.getDate("created_at").toLocalDate();
+                candidate.setCreatedAt(createdAt);
+                candidate.setActive(rs.getBoolean("is_active"));
+            }
 
-		try {
-			String query = "SELECT user_id, election_id, name, created_at  FROM candidates  WHERE is_active = 1 and user_id = ? ";
-			con = ConnectionUtil.getConnection();
-			ps = con.prepareStatement(query);
-			ps.setInt(1, candidateId);
-			rs = ps.executeQuery();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.out.println(e.getMessage());
+            throw new PersistanceException(e);
+        } finally {
+            ConnectionUtil.close(con, ps, rs);
+        }
 
-			if (rs.next()) {
-				candidate = new Candidate();
-				candidate.setCandidateId(rs.getInt("user_id"));
-				candidate.setElectionId(rs.getInt("election_id"));
-				candidate.setCandidateName(rs.getString("name"));
-				LocalDate date = CandidateService.convertSqlDateToLocalDate(rs.getDate("created_at"));
-				candidate.setCreatedAt(date);
-			}
+        return candidate;
+    }
 
-		} catch (SQLException e) {
-			e.printStackTrace();
-			System.out.println(e.getMessage());
-			throw new PersistanceException(e);
-		} finally {
-			ConnectionUtil.close(con, ps, rs);
-		}
+    public List<Candidate> findAll() throws PersistanceException {
+        Connection con = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        List<Candidate> candidateList = new ArrayList<>();
 
-		return candidate;
-	}
+        try {
+            String query = "SELECT * FROM candidates WHERE is_active = true";
+            con = ConnectionUtil.getConnection();
+            ps = con.prepareStatement(query);
+            rs = ps.executeQuery();
 
-	/**
-	 * Retrieves a Candidate entity from the database based on the provided
-	 * Candidate ID.
-	 *
-	 * @param id The ID of the Candidate to retrieve.
-	 * @return The matched Candidate entity or null if not found.
-	 * @throws PersistanceException If there's an issue with the database operation.
-	 */
-	public Candidate findById(int Id) throws PersistanceException {
-		Connection con = null;
-		PreparedStatement ps = null;
-		ResultSet rs = null;
-		Candidate matchedCandidate = null;
+            while (rs.next()) {
+                Candidate candidate = new Candidate();
+                candidate.setId(rs.getInt("id"));
+                candidate.setUserId(rs.getInt("user_id"));
+                candidate.setElectionId(rs.getInt("election_id"));
+                candidate.setName(rs.getString("name"));
+                candidate.setPartyName(rs.getString("party_name"));
+                candidate.setImageUrl(rs.getString("image_url"));
+                LocalDate createdAt = rs.getDate("created_at").toLocalDate();
+                candidate.setCreatedAt(createdAt);
+                candidate.setActive(rs.getBoolean("is_active"));
+                candidateList.add(candidate);
+            }
 
-		try {
-			String query = "SELECT user_id, election_id, name, created_at FROM candidates WHERE is_active = 1 AND id = ?";
-			con = ConnectionUtil.getConnection();
-			ps = con.prepareStatement(query);
-			ps.setInt(1, Id);
-			rs = ps.executeQuery();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.out.println(e.getMessage());
+            throw new PersistanceException(e);
+        } finally {
+            ConnectionUtil.close(con, ps, rs);
+        }
 
-			if (rs.next()) {
-				matchedCandidate = new Candidate();
-				matchedCandidate.setCandidateId(rs.getInt("user_id"));
-				matchedCandidate.setElectionId(rs.getInt("election_id"));
-				matchedCandidate.setCandidateName(rs.getString("name"));
-				LocalDate date = CandidateService.convertSqlDateToLocalDate(rs.getDate("created_at"));
-				matchedCandidate.setCreatedAt(date);
-			}
+        return candidateList;
+    }
 
-		} catch (SQLException e) {
-			e.printStackTrace();
-			System.out.println(e.getMessage());
-			throw new PersistanceException(e);
-		} finally {
-			ConnectionUtil.close(con, ps, rs);
-		}
+    public void changeActive(int id) throws PersistanceException {
+        Connection con = null;
+        PreparedStatement ps = null;
 
-		System.out.println(matchedCandidate);
-		return matchedCandidate;
-	}
+        try {
+            String query = "UPDATE candidates SET is_active = true WHERE id = ?";
+            con = ConnectionUtil.getConnection();
+            ps = con.prepareStatement(query);
+            ps.setInt(1, id);
 
-	/**
-	 * Retrieves a list of Candidate entities from the database.
-	 *
-	 * @return A list of Candidate entities.
-	 * @throws PersistanceException If there's an issue with the database operation.
-	 */
-	public List<Candidate> findAll() throws PersistanceException {
+            ps.executeUpdate();
 
-		Connection con = null;
-		PreparedStatement ps = null;
-		ResultSet rs = null;
-
-		List<Candidate> CandidateList = new ArrayList<Candidate>();
-
-		try {
-			String query = "SELECT user_id, election_id, name, created_at from candidates where is_active = 1";
-			con = ConnectionUtil.getConnection();
-			ps = con.prepareStatement(query);
-			rs = ps.executeQuery();
-
-			while (rs.next()) {
-				Candidate candidates = new Candidate();
-				candidates.setCandidateId(rs.getInt("user_id"));
-				candidates.setElectionId(rs.getInt("election_id"));
-				candidates.setCandidateName(rs.getString("name"));
-				LocalDate date = CandidateService.convertSqlDateToLocalDate(rs.getDate("created_at"));
-				candidates.setCreatedAt(date);
-
-				CandidateList.add(candidates);
-			}
-
-		} catch (SQLException e) {
-
-			e.printStackTrace();
-			System.out.println(e.getMessage());
-			throw new PersistanceException(e);
-
-		} finally {
-
-			ConnectionUtil.close(con, ps);
-
-		}
-
-		return CandidateList;
-
-	}
-
-	public void changeActive(int newId) throws PersistanceException {
-		Connection con = null;
-		PreparedStatement ps = null;
-
-		try {
-			String query = "UPDATE candidates SET is_active = 1 WHERE id = ?";
-			con = ConnectionUtil.getConnection();
-			ps = con.prepareStatement(query);
-//	        ps.setBoolean(1, false);
-			ps.setInt(1, newId);
-
-			ps.executeUpdate();
-
-		} catch (SQLException e) {
-			e.printStackTrace();
-			System.out.println(e.getMessage());
-			throw new PersistanceException(e);
-		} finally {
-			ConnectionUtil.close(con, ps);
-		}
-	}
-
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.out.println(e.getMessage());
+            throw new PersistanceException(e);
+        } finally {
+            ConnectionUtil.close(con, ps);
+        }
+    }
 }

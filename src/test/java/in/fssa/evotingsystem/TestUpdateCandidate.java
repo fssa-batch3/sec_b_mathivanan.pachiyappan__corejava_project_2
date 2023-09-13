@@ -8,31 +8,38 @@ import java.time.LocalDate;
 
 import org.junit.jupiter.api.Test;
 
+import in.fssa.evotingsystem.dao.CandidateDAO;
 import in.fssa.evotingsystem.exception.ValidationException;
 import in.fssa.evotingsystem.model.Candidate;
 import in.fssa.evotingsystem.service.CandidateService;
 
 public class TestUpdateCandidate {
-	
+
 	@Test
-	public void testUpdateCandidate() {
+	public void testUpdateCandidateWithValidData() {
+		CandidateService candidateService = new CandidateService();
+		CandidateDAO candidateDAO = new CandidateDAO();
+
 		// Create a mock candidate object with updated data
 		Candidate updatedCandidate = new Candidate();
-		updatedCandidate.setCandidateId(123); // Example candidate ID
-		updatedCandidate.setElectionId(456); // Example election ID
-		updatedCandidate.setCandidateName("John Doe");
-		updatedCandidate.setCreatedAt(LocalDate.now());
 
-		CandidateService candidateService = new CandidateService();
+		updatedCandidate.setUserId(2657); // Example candidate ID
+		updatedCandidate.setElectionId(4); // Example election ID
+		updatedCandidate.setName("S.Anbumani");
+		updatedCandidate.setPartyName("PMK");
+		updatedCandidate.setImageUrl("https://iili.io/J90ymrv.png");
+		updatedCandidate.setCreatedAt(LocalDate.now());
+		updatedCandidate.setActive(true);
 
 		assertDoesNotThrow(() -> {
-			candidateService.updateCandidate(3, updatedCandidate);
-	    });
+
+			candidateService.updateCandidate(20, updatedCandidate);
+
+		});
 	}
 
 	@Test
 	public void testDeleteCandidateWithInvalidId() {
-
 		CandidateService candidateService = new CandidateService();
 		Exception exception = assertThrows(ValidationException.class, () -> {
 			candidateService.deleteCandidate(-2);
@@ -40,22 +47,21 @@ public class TestUpdateCandidate {
 		String expectedMessage = "ID cannot be 0 or negative";
 		String actualMessage = exception.getMessage();
 		assertTrue(expectedMessage.equals(actualMessage));
-
 	}
 
 	@Test
-	public void testCreateCandidateWithNameEmpty() {
+	public void testUpdateCandidateWithNameEmpty() {
 		CandidateService candidateService = new CandidateService();
 		Exception exception = assertThrows(ValidationException.class, () -> {
 
-			Candidate newCandidate = new Candidate();
+			Candidate updatedCandidate = new Candidate();
 
-			newCandidate.setCandidateId(27456);
-			newCandidate.setElectionId(202);
-			newCandidate.setCandidateName("");
-			newCandidate.setCreatedAt(LocalDate.of(2023, 12, 12));
+			updatedCandidate.setUserId(2657);
+			updatedCandidate.setElectionId(4);
+			updatedCandidate.setName("");
+			updatedCandidate.setCreatedAt(LocalDate.of(2023, 12, 12));
 
-			candidateService.createCandidate(newCandidate);
+			candidateService.updateCandidate(20, updatedCandidate);
 		});
 		String expectedMessage = "Candidate Name cannot be Null or Empty";
 		String actualMessage = exception.getMessage();
@@ -63,22 +69,21 @@ public class TestUpdateCandidate {
 	}
 
 	@Test
-	public void testCreateCandidateWithNameNull() {
+	public void testUpdateCandidateWithNameNull() {
 		CandidateService candidateService = new CandidateService();
 		Exception exception = assertThrows(ValidationException.class, () -> {
 
-			Candidate newCandidate = new Candidate();
+			Candidate updatedCandidate = new Candidate();
 
-			newCandidate.setCandidateId(16457);
-			newCandidate.setElectionId(202);
-			newCandidate.setCandidateName(null);
-			newCandidate.setCreatedAt(LocalDate.of(2023, 12, 12));
+			updatedCandidate.setUserId(2657);
+			updatedCandidate.setElectionId(4);
+			updatedCandidate.setName(null);
+			updatedCandidate.setCreatedAt(LocalDate.of(2023, 12, 12));
 
-			candidateService.createCandidate(newCandidate);
+			candidateService.updateCandidate(20, updatedCandidate);
 		});
 		String expectedMessage = "Candidate Name cannot be Null or Empty";
 		String actualMessage = exception.getMessage();
 		assertTrue(expectedMessage.equals(actualMessage));
 	}
-
 }

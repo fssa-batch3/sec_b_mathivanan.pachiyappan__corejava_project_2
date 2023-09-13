@@ -4,78 +4,91 @@ import java.time.LocalDate;
 
 public class CandidateEntity implements Comparable<CandidateEntity> {
 
-	protected int Id;
-	protected String candidateName;
-	protected int electionId;
-	protected int candidateId;
-	protected LocalDate createdAt;
-	protected boolean isActive;
+    protected int id; // Updated to match the SQL table column name
+    protected int userId; // Updated to match the SQL table column name
+    protected int electionId;
+    protected String name; // Updated to match the SQL table column name
+    protected String partyName;
+    protected String imageUrl; // Added to match the SQL table
+    protected LocalDate createdAt;
+    protected boolean isActive;
 
-	public int getId() {
-		return Id;
-	}
+    public int getId() {
+        return id;
+    }
 
-	public void setId(int id) {
-		Id = id;
-	}
+    public void setId(int id) {
+        this.id = id;
+    }
 
-	public String getCandidateName() {
-		return candidateName;
-	}
+    public int getUserId() {
+        return userId;
+    }
 
-	public void setCandidateName(String candidateName) {
-		this.candidateName = candidateName;
-	}
+    public void setUserId(int userId) {
+        this.userId = userId;
+    }
 
-	public int getElectionId() {
-		return electionId;
-	}
+    public int getElectionId() {
+        return electionId;
+    }
 
-	public void setElectionId(int electionId) {
-		this.electionId = electionId;
-	}
+    public void setElectionId(int electionId) {
+        this.electionId = electionId;
+    }
 
-	public int getCandidateId() {
-		return candidateId;
-	}
+    public String getName() {
+        return name;
+    }
 
-	public void setCandidateId(int candidateId) {
-		this.candidateId = candidateId;
-	}
+    public void setName(String name) {
+        this.name = name;
+    }
 
-	public LocalDate getCreatedAt() {
-		return createdAt;
-	}
+    public String getPartyName() {
+        return partyName;
+    }
 
-	public void setCreatedAt(LocalDate createdAt) {
-		this.createdAt = createdAt;
-	}
+    public void setPartyName(String partyName) {
+        this.partyName = partyName;
+    }
 
-	public boolean isActive() {
-		return isActive;
-	}
+    public String getImageUrl() {
+        return imageUrl;
+    }
 
-	public void setActive(boolean isActive) {
-		this.isActive = isActive;
-	}
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
 
-	@Override
-	public String toString() {
-		return "CandidateEntity [Id=" + this.getId() + ", candidateName=" + this.getCandidateName() + ", electionId="
-				+ this.getElectionId() + ", userId=" + this.getCandidateId() + ", createdAt=" + this.getCreatedAt()
-				+ ", isActive=" + this.isActive() + "]";
-	}
+    public LocalDate getCreatedAt() {
+        return createdAt;
+    }
 
-	public int compareTo(CandidateEntity o) {
-		if (this.getId() == o.getId()) {
-			return 0;
-		} else {
-			if (this.getId() < (o.getId())) {
-				return -1;
-			} else {
-				return 1;
-			}
-		}
-	}
+    public void setCreatedAt(LocalDate createdAt) {
+        this.createdAt = createdAt;
+    }
 
+    public boolean isActive() {
+        return isActive;
+    }
+
+    public void setActive(boolean isActive) {
+        this.isActive = isActive;
+    }
+
+    @Override
+    public String toString() {
+        return "CandidateEntity [id=" + id + ", userId=" + userId + ", electionId=" + electionId + ", name=" + name
+                + ", partyName=" + partyName + ", imageUrl=" + imageUrl + ", createdAt=" + createdAt + ", isActive="
+                + isActive + "]";
+    }
+
+    public int compareTo(CandidateEntity o) {
+        if (this.id == o.id) {
+            return 0;
+        } else {
+            return Integer.compare(this.id, o.id);
+        }
+    }
 }

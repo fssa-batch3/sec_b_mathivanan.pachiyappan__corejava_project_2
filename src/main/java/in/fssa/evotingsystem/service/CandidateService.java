@@ -23,48 +23,6 @@ public class CandidateService {
 	private CandidateDAO candidateDAO = new CandidateDAO();
 
 	/**
-	 * Converts a string representation of a date to a LocalDate object.
-	 *
-	 * @param dateString The date string to be converted.
-	 * @return The LocalDate representation of the input date string.
-	 */
-	public static LocalDate convertToDate(String dateString) {
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-
-		try {
-			LocalDate localDate = LocalDate.parse(dateString, formatter);
-			return localDate;
-		} catch (Exception e) {
-			System.out.println("Invalid date format!");
-			return null;
-		}
-	}
-
-	/**
-	 * Converts a LocalDate object to a java.util.Date object.
-	 *
-	 * @param newDate The LocalDate to be converted.
-	 * @return The java.util.Date representation of the input LocalDate.
-	 */
-	public static java.util.Date convertDate(LocalDate newDate) {
-		LocalDateTime localDateTime = newDate.atStartOfDay();
-		java.util.Date date = Date.from(localDateTime.atZone(ZoneId.systemDefault()).toInstant());
-		return date;
-	}
-
-	/**
-	 * Converts a java.sql.Date object to a LocalDate object.
-	 *
-	 * @param sqlDate The java.sql.Date to be converted.
-	 * @return The LocalDate representation of the input java.sql.Date.
-	 */
-	public static LocalDate convertSqlDateToLocalDate(Date sqlDate) {
-		java.sql.Date c = (java.sql.Date) sqlDate;
-		java.util.Date utilDate = new java.util.Date(c.getTime());
-		return utilDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-	}
-
-	/**
 	 * Creates a new candidate.
 	 *
 	 * @param candidate The candidate to be created.
@@ -91,7 +49,7 @@ public class CandidateService {
 	 */
 	public void updateCandidate(int newId, Candidate candidate) throws ServiceException, ValidationException {
 	    try {
-	        CandidateValidator.isCandidateIdExistsForUpdate(newId, candidate.getCandidateId());
+//	        CandidateValidator.isCandidateIdExistsForUpdate(newId, candidate.getCandidateId());
 	        CandidateValidator.isIdExists(newId);
 	        CandidateValidator.validateUpdate(newId, candidate);
 	        candidateDAO.update(newId, candidate);

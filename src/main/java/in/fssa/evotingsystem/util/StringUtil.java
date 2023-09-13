@@ -20,6 +20,12 @@ public class StringUtil {
             throw new ValidationException(inputName.concat(" cannot be Null or Empty"));
         }
     }
+    
+    public static void rejectIfValidPassword(String input, String inputName) throws ValidationException {
+        if (isInvalidString(input)) {
+            throw new ValidationException(inputName.concat(" cannot be Null or Empty"));
+        }
+    }
 
     /**
      * Checks if a string is valid (not null and not empty after trimming).

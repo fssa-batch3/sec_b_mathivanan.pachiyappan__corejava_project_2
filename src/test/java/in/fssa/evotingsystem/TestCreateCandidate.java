@@ -9,6 +9,7 @@ import java.util.Random;
 
 import org.junit.jupiter.api.Test;
 
+import in.fssa.evotingsystem.dao.CandidateDAO;
 import in.fssa.evotingsystem.exception.ValidationException;
 import in.fssa.evotingsystem.model.Candidate;
 import in.fssa.evotingsystem.service.CandidateService;
@@ -18,26 +19,32 @@ public class TestCreateCandidate {
 	@Test
 	public void testCreateCandidateWithValidData() {
 		CandidateService candidateService = new CandidateService();
+		CandidateDAO candidateDAO = new CandidateDAO();
 
 		int min = 1;
 		int max = 999999999;
-		int genarate = 1000;
+		int generate = 1000;
 		Random rand = new Random();
 		int randNum = 0;
 
-		for (int i = 0; i < genarate; i++) {
+		for (int i = 0; i < generate; i++) {
 			randNum = rand.nextInt(max - min + 1) + min;
 		}
 
 		Candidate newCandidate = new Candidate();
 
-		newCandidate.setCandidateId(randNum);
-		newCandidate.setElectionId(2);
-		newCandidate.setCandidateName("Modi");
+		newCandidate.setUserId(randNum);
+		newCandidate.setElectionId(4);
+		newCandidate.setName("Modi");
+		newCandidate.setPartyName("Party Name");
+		newCandidate.setImageUrl("http://example.com/image.jpg");
 		newCandidate.setCreatedAt(LocalDate.of(2023, 12, 3));
+		newCandidate.setActive(true);
 
 		assertDoesNotThrow(() -> {
+
 			candidateService.createCandidate(newCandidate);
+
 		});
 	}
 
@@ -59,9 +66,9 @@ public class TestCreateCandidate {
 
 			Candidate newCandidate = new Candidate();
 
-			newCandidate.setCandidateId(27456);
+			newCandidate.setUserId(27456);
 			newCandidate.setElectionId(202);
-			newCandidate.setCandidateName("");
+			newCandidate.setName("");
 			newCandidate.setCreatedAt(LocalDate.of(2023, 12, 12));
 
 			candidateService.createCandidate(newCandidate);
@@ -78,9 +85,9 @@ public class TestCreateCandidate {
 
 			Candidate newCandidate = new Candidate();
 
-			newCandidate.setCandidateId(16457);
+			newCandidate.setUserId(16457);
 			newCandidate.setElectionId(202);
-			newCandidate.setCandidateName(null);
+			newCandidate.setName(null);
 			newCandidate.setCreatedAt(LocalDate.of(2023, 12, 12));
 
 			candidateService.createCandidate(newCandidate);
@@ -97,9 +104,9 @@ public class TestCreateCandidate {
 
 			Candidate newCandidate = new Candidate();
 
-			newCandidate.setCandidateId(-1);
+			newCandidate.setUserId(-1);
 			newCandidate.setElectionId(202);
-			newCandidate.setCandidateName("Modi");
+			newCandidate.setName("Modi");
 			newCandidate.setCreatedAt(LocalDate.of(2023, 12, 12));
 
 			candidateService.createCandidate(newCandidate);
@@ -108,7 +115,7 @@ public class TestCreateCandidate {
 		String actualMessage = exception.getMessage();
 		assertTrue(expectedMessage.equals(actualMessage));
 	}
-	
+
 	@Test
 	public void testCreateCandidateWithInvalidElectionId() {
 		CandidateService candidateService = new CandidateService();
@@ -116,11 +123,11 @@ public class TestCreateCandidate {
 
 			Candidate newCandidate = new Candidate();
 
-			newCandidate.setCandidateId(1);
+			newCandidate.setUserId(1);
 			newCandidate.setElectionId(-202);
-			newCandidate.setCandidateName("Modi");
+			newCandidate.setName("Modi");
 			newCandidate.setCreatedAt(LocalDate.of(2023, 12, 12));
-			
+
 			candidateService.createCandidate(newCandidate);
 		});
 		String expectedMessage = "Invalid Election ID";

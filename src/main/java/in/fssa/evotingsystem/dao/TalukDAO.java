@@ -101,7 +101,7 @@ public class TalukDAO implements TalukInterface {
 		PreparedStatement ps = null;
 
 		try {
-			String query = "UPDATE taluks SET taluk_name = ? Where id = 1";
+			String query = "UPDATE taluks SET taluk_name = ? Where id = ?";
 			con = ConnectionUtil.getConnection();
 			ps = con.prepareStatement(query);
 			ps.setString(1, newTaluk.getTalukName());

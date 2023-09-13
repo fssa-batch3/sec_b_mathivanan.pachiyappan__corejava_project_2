@@ -17,8 +17,8 @@ public class TestDeleteElection {
 		assertDoesNotThrow(() -> {
 			ElectionService electionService = new ElectionService();
 			ElectionDAO app = new ElectionDAO();
-			app.changeActive(1);
-			electionService.deleteElection(1);
+			app.changeActive(3);
+			electionService.deleteElection(3);
 		});
 	}
 

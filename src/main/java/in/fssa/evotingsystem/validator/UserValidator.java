@@ -128,7 +128,7 @@ public class UserValidator {
 	 * @throws ValidationException If the updated User object or its attributes are
 	 *                             invalid.
 	 */
-	public static void validateUpdate(int id,User updatedUser) throws ValidationException {
+	public static void validateUpdate(int id, User updatedUser) throws ValidationException {
 
 		if (updatedUser == null) {
 			throw new ValidationException("Invalid User Input for Update");
@@ -177,13 +177,41 @@ public class UserValidator {
 
 		UserDAO userDAO = new UserDAO();
 		try {
-			User existingUser = userDAO.findByPhoneNumber(phoneNumber);
-			if (existingUser != null && existingUser.getId() != userId) {
+			User existingUser = userDAO.findByPhoneNumber(userId);
+			if (existingUser != null && existingUser.getId() != phoneNumber) {
 				throw new ValidationException("Phone number already exists for another user");
 			}
 		} catch (PersistanceException e) {
 			throw new ValidationException(e.getMessage());
 		}
+	}
+
+	/**
+	 * Validates a phone number.
+	 *
+	 * @param phoneNumber The phone number to validate.
+	 * @throws ValidationException If the phone number is not valid.
+	 */
+	public static void validatePhoneNumber(long phoneNumber) throws ValidationException {
+		if (phoneNumber <= 600000001L || phoneNumber >= 9999999999L) {
+			throw new ValidationException("Invalid phone number");
+		}
+	}
+
+	/**
+	 * Validates a password.
+	 *
+	 * @param password The password to validate.
+	 * @throws ValidationException If the password is not valid.
+	 */
+	public static void validatePassword(String password) throws ValidationException {
+		if (StringUtil.isInvalidString(password)) {
+			throw new ValidationException("Invalid password");
+		}
+		if (!isValidPassword(password)) {
+			throw new ValidationException("Password must be at least 8 characters and meet specific criteria");
+		}
+		// You can add additional password validation criteria here if needed
 	}
 
 }
